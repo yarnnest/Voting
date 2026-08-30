@@ -72,6 +72,7 @@ async function showAdmin() {
 
 
     await loadPages();
+
     populateManagementPages();
 
 }
@@ -181,6 +182,7 @@ async function loadPages() {
     pages = data || [];
 
     renderPages();
+
     populateManagementPages();
 
 }
@@ -738,7 +740,7 @@ function resetForm() {
 
 
 /* ==============================
-   DELETE
+   DELETE PAGE
 ================================ */
 
 
@@ -857,9 +859,11 @@ function escapeHtml(
 
 }
 
-/* ==============================
-   VOTE AND COMMENT MANAGEMENT
-================================ */
+
+/* =========================================
+   MANAGE VOTES AND COMMENTS
+========================================= */
+
 
 function populateManagementPages() {
 
@@ -868,12 +872,13 @@ function populateManagementPages() {
             "managementPageSelect"
         );
 
+
     if (!select) {
+
         return;
+
     }
 
-    const previousValue =
-        select.value;
 
     select.innerHTML =
         `
@@ -881,6 +886,14 @@ function populateManagementPages() {
             Select a voting page
         </option>
         `;
+
+
+    if (!pages.length) {
+
+        return;
+
+    }
+
 
     pages.forEach(
         page => {
@@ -890,11 +903,14 @@ function populateManagementPages() {
                     "option"
                 );
 
+
             option.value =
-                page.id;
+                String(page.id);
+
 
             option.textContent =
                 page.title;
+
 
             select.appendChild(
                 option
@@ -903,76 +919,87 @@ function populateManagementPages() {
         }
     );
 
-    if (
-        previousValue &&
-        pages.some(
-            page =>
-                page.id === previousValue
-        )
-    ) {
-
-        select.value =
-            previousValue;
-
-        loadManagedVotes(
-            previousValue
-        );
-
-    }
 }
 
-const managementPageSelect =
-    document.getElementById(
-        "managementPageSelect"
-    );
 
-if (managementPageSelect) {
+document.addEventListener(
+    "change",
+    function(event) {
 
-    managementPageSelect.addEventListener(
-        "change",
-        function() {
+        if (
+            event.target &&
+            event.target.id ===
+            "managementPageSelect"
+        ) {
 
-            if (!this.value) {
+            const pageId =
+                event.target.value;
 
-                document.getElementById(
-                    "managedVotesList"
-                ).innerHTML =
-                    `
-                    <div class="management-empty">
-                        Select a voting page to review its submissions.
-                    </div>
-                    `;
+
+            if (!pageId) {
+
+                const list =
+                    document.getElementById(
+                        "managedVotesList"
+                    );
+
+
+                if (list) {
+
+                    list.innerHTML =
+                        `
+                        <div class="management-empty">
+                            Select a voting page to review its submissions.
+                        </div>
+                        `;
+
+                }
+
 
                 return;
+
             }
 
+
             loadManagedVotes(
-                this.value
+                pageId
             );
 
         }
-    );
-}
+
+    }
+);
+
+
+/* =========================================
+   LOAD VOTES FOR ADMIN
+========================================= */
+
 
 async function loadManagedVotes(
     pageId
 ) {
 
-    const container =
+    const list =
         document.getElementById(
             "managedVotesList"
         );
 
-    if (!container) {
+
+    if (!list) {
+
         return;
+
     }
 
-    container.innerHTML =
+
+    list.innerHTML =
         `
         <div class="management-loading">
             Loading submissions...
         </div>
         `;
+
 
     const {
         data,
@@ -994,50 +1021,97 @@ async function loadManagedVotes(
                 }
             );
 
+
     if (error) {
 
-        console.error(error);
-
-        container.innerHTML =
-            `
-            <div class="management-empty">
-                Unable to load submissions:
-                ${escapeHtml(error.message)}
-            </div>
-            `;
-
-        return;
-    }
-
-    const selectedPage =
-        pages.find(
-            page =>
-                page.id === pageId
+        console.error(
+            "Unable to fetch votes:",
+            error
         );
 
-    if (!data || !data.length) {
 
-        container.innerHTML =
+        list.innerHTML =
             `
             <div class="management-empty">
-                No votes have been submitted for this page yet.
+
+                <strong>
+                    Unable to fetch votes.
+                </strong>
+
+                <br>
+
+                ${escapeHtml(
+                    error.message
+                )}
+
             </div>
             `;
 
+
         return;
+
     }
 
-    container.innerHTML =
+
+    if (
+        !data ||
+        !data.length
+    ) {
+
+        list.innerHTML =
+            `
+            <div class="management-empty">
+                No votes have been submitted for this page.
+            </div>
+            `;
+
+
+        return;
+
+    }
+
+
+    const page =
+        pages.find(
+            item =>
+                String(item.id) ===
+                String(pageId)
+        );
+
+
+    if (!page) {
+
+        list.innerHTML =
+            `
+            <div class="management-empty">
+                Voting page information could not be found.
+            </div>
+            `;
+
+
+        return;
+
+    }
+
+
+    list.innerHTML =
         data
             .map(
                 vote =>
                     renderManagedVote(
                         vote,
-                        selectedPage
+                        page
                     )
             )
             .join("");
+
 }
+
+
+/* =========================================
+   RENDER ADMIN VOTE
+========================================= */
+
 
 function renderManagedVote(
     vote,
@@ -1050,19 +1124,19 @@ function renderManagedVote(
             ? vote.voter_name.trim()
             : "Anonymous";
 
-    const voteNumber =
-        Number(vote.vote);
 
     const voteChoice =
-        voteNumber === 1
+        Number(vote.vote) === 1
             ? page.image1_name
             : page.image2_name;
 
-    const comment =
-        vote.comment &&
-        vote.comment.trim()
-            ? vote.comment.trim()
-            : "";
+
+    const hasComment =
+        Boolean(
+            vote.comment &&
+            vote.comment.trim()
+        );
+
 
     return `
         <article class="managed-vote">
@@ -1072,69 +1146,108 @@ function renderManagedVote(
                 <div class="managed-vote-top">
 
                     <div>
+
                         <div class="managed-vote-name">
-                            ${escapeHtml(voterName)}
+                            ${escapeHtml(
+                                voterName
+                            )}
                         </div>
 
                         <div class="managed-vote-date">
                             ${escapeHtml(
-                                formatAdminDate(
+                                formatManagementDate(
                                     vote.created_at
                                 )
                             )}
                         </div>
+
                     </div>
 
+
                     <span class="managed-vote-choice">
+
                         Voted for
-                        ${escapeHtml(voteChoice)}
+                        ${escapeHtml(
+                            voteChoice
+                        )}
+
                     </span>
 
                 </div>
 
+
                 ${
-                    comment
+                    hasComment
+
                         ? `
-                            <div class="managed-comment">
-                                ${escapeHtml(comment)}
-                            </div>
+
+                        <div class="managed-comment">
+
+                            ${escapeHtml(
+                                vote.comment
+                            )}
+
+                        </div>
+
                         `
+
                         : `
-                            <div class="managed-no-comment">
-                                No comment submitted
-                            </div>
+
+                        <div class="managed-no-comment">
+
+                            No comment submitted
+
+                        </div>
+
                         `
                 }
 
             </div>
 
+
             <div class="managed-actions">
 
                 ${
-                    comment
+                    hasComment
+
                         ? `
-                            <button
-                                type="button"
-                                class="remove-comment-button"
-                                onclick="removeVoteComment('${vote.id}', '${page.id}')">
-                                Remove Comment
-                            </button>
+
+                        <button
+                            type="button"
+                            class="remove-comment-button"
+                            onclick="removeVoteComment('${vote.id}', '${page.id}')">
+
+                            Remove Comment
+
+                        </button>
+
                         `
+
                         : ""
                 }
+
 
                 <button
                     type="button"
                     class="delete-vote-button"
                     onclick="deleteManagedVote('${vote.id}', '${page.id}')">
+
                     Delete Vote
+
                 </button>
 
             </div>
 
         </article>
     `;
+
 }
+
+
+/* =========================================
+   REMOVE ONLY COMMENT
+========================================= */
+
 
 async function removeVoteComment(
     voteId,
@@ -1146,8 +1259,11 @@ async function removeVoteComment(
             "Remove this comment? The vote will remain."
         )
     ) {
+
         return;
+
     }
+
 
     const {
         error
@@ -1162,6 +1278,7 @@ async function removeVoteComment(
                 voteId
             );
 
+
     if (error) {
 
         alert(
@@ -1169,15 +1286,29 @@ async function removeVoteComment(
             error.message
         );
 
+
+        console.error(error);
+
+
         return;
+
     }
+
 
     await loadManagedVotes(
         pageId
     );
 
+
     await loadPages();
+
 }
+
+
+/* =========================================
+   DELETE ENTIRE VOTE
+========================================= */
+
 
 async function deleteManagedVote(
     voteId,
@@ -1189,8 +1320,11 @@ async function deleteManagedVote(
             "Delete this vote and its comment? This cannot be undone."
         )
     ) {
+
         return;
+
     }
+
 
     const {
         error
@@ -1203,6 +1337,7 @@ async function deleteManagedVote(
                 voteId
             );
 
+
     if (error) {
 
         alert(
@@ -1210,41 +1345,62 @@ async function deleteManagedVote(
             error.message
         );
 
+
+        console.error(error);
+
+
         return;
+
     }
+
 
     await loadManagedVotes(
         pageId
     );
 
+
     await loadPages();
+
 }
 
-function formatAdminDate(
-    date
+
+/* =========================================
+   ADMIN DATE FORMAT
+========================================= */
+
+
+function formatManagementDate(
+    value
 ) {
 
-    if (!date) {
+    if (!value) {
+
         return "";
+
     }
 
-    const parsed =
-        new Date(date);
+
+    const date =
+        new Date(value);
+
 
     if (
         Number.isNaN(
-            parsed.getTime()
+            date.getTime()
         )
     ) {
+
         return "";
+
     }
 
-    return parsed.toLocaleString(
+
+    return date.toLocaleString(
         undefined,
         {
             dateStyle: "medium",
             timeStyle: "short"
         }
     );
-}
 
+}
