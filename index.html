@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header class="page-header">
+        <h1 id="pageTitle">Loading...</h1>
+        <p id="pageDescription"></p>
+    </header>
+
+    <div id="loading" class="message">
+        Loading voting page...
+    </div>
+
+    <div id="errorMessage" class="message error hidden"></div>
+
+    <main id="votingContent" class="hidden">
+
+        <section class="images-container">
+
+            <div class="image-option">
+                <h2 id="image1Name"></h2>
+
+                <div class="image-wrapper"
+                     onclick="openImage(1)">
+                    <img id="image1"
+                         src=""
+                         alt="Option 1">
+                </div>
+
+                <label class="vote-option">
+                    <input type="radio"
+                           name="vote"
+                           value="1">
+                    <span>Vote for this image</span>
+                </label>
+            </div>
+
+
+            <div class="image-option">
+                <h2 id="image2Name"></h2>
+
+                <div class="image-wrapper"
+                     onclick="openImage(2)">
+                    <img id="image2"
+                         src=""
+                         alt="Option 2">
+                </div>
+
+                <label class="vote-option">
+                    <input type="radio"
+                           name="vote"
+                           value="2">
+                    <span>Vote for this image</span>
+                </label>
+            </div>
+
+        </section>
+
+
+        <section class="voting-form">
+
+            <h2>Cast Your Vote</h2>
+
+            <form id="voteForm">
+
+                <div class="form-group">
+                    <label for="voterName">
+                        Your Name *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="voterName"
+                        maxlength="100"
+                        required
+                        placeholder="Enter your name">
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="comment">
+                        Comment
+                    </label>
+
+                    <textarea
+                        id="comment"
+                        maxlength="1000"
+                        placeholder="Write a comment (optional)"></textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    id="submitVote">
+                    Submit Vote
+                </button>
+
+            </form>
+
+            <div id="voteMessage"
+                 class="message hidden">
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- Full screen image viewer -->
+
+<div id="imageModal"
+     class="image-modal hidden">
+
+    <button
+        class="close-modal"
+        onclick="closeImage()">
+        ×
+    </button>
+
+    <div
+        id="zoomContainer"
+        class="zoom-container">
+
+        <img
+            id="fullImage"
+            src=""
+            alt="Full size image">
+
+    </div>
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>

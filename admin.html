@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Panel</title>
+
+    <link rel="stylesheet"
+          href="styles.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+
+<body>
+
+<div class="admin-container">
+
+    <div id="loginSection">
+
+        <div class="admin-card">
+
+            <h1>Admin Login</h1>
+
+            <form id="loginForm">
+
+                <div class="form-group">
+
+                    <label>Email</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        required>
+
+                </div>
+
+
+                <button type="submit">
+                    Login
+                </button>
+
+            </form>
+
+            <div
+                id="loginMessage"
+                class="message hidden">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="adminSection"
+        class="hidden">
+
+        <header class="admin-header">
+
+            <div>
+
+                <h1>Voting Page Manager</h1>
+
+                <p>
+                    Create and manage your voting pages
+                </p>
+
+            </div>
+
+            <button
+                id="logoutButton"
+                class="secondary-button">
+                Logout
+            </button>
+
+        </header>
+
+
+        <section class="admin-card">
+
+            <h2>Create Voting Page</h2>
+
+            <form id="pageForm">
+
+                <input
+                    type="hidden"
+                    id="editingPageId">
+
+
+                <div class="form-group">
+
+                    <label>
+                        Page Title *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="pageTitleInput"
+                        required
+                        maxlength="200"
+                        placeholder="Example: Best Poster Design">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        URL Slug *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="slugInput"
+                        required
+                        maxlength="100"
+                        placeholder="best-poster-design">
+
+                    <small>
+                        Example:
+                        yourwebsite.com/?slug=best-poster-design
+                    </small>
+
+                </div>
+
+
+                <div class="image-upload-grid">
+
+
+                    <div class="upload-box">
+
+                        <h3>Image 1</h3>
+
+                        <div class="form-group">
+
+                            <label>
+                                Image Name *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="image1NameInput"
+                                required
+                                placeholder="Image 1">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Select Image *
+                            </label>
+
+                            <input
+                                type="file"
+                                id="image1File"
+                                accept="image/*">
+
+                        </div>
+
+
+                        <img
+                            id="image1Preview"
+                            class="preview-image hidden">
+
+                    </div>
+
+
+                    <div class="upload-box">
+
+                        <h3>Image 2</h3>
+
+                        <div class="form-group">
+
+                            <label>
+                                Image Name *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="image2NameInput"
+                                required
+                                placeholder="Image 2">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Select Image *
+                            </label>
+
+                            <input
+                                type="file"
+                                id="image2File"
+                                accept="image/*">
+
+                        </div>
+
+
+                        <img
+                            id="image2Preview"
+                            class="preview-image hidden">
+
+                    </div>
+
+                </div>
+
+
+                <label class="checkbox-label">
+
+                    <input
+                        type="checkbox"
+                        id="publishedInput"
+                        checked>
+
+                    Published
+
+                </label>
+
+
+                <div class="button-row">
+
+                    <button
+                        type="submit"
+                        id="savePageButton">
+
+                        Create Page
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="cancelEditButton"
+                        class="secondary-button hidden">
+
+                        Cancel
+
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="pageMessage"
+                    class="message hidden">
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <section class="admin-card">
+
+            <h2>Your Voting Pages</h2>
+
+            <div id="pagesList">
+
+                Loading pages...
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<script src="admin.js"></script>
+
+</body>
+</html>
