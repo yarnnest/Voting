@@ -272,14 +272,9 @@ function renderVotingPages(pages) {
 
     </a>
 
-    <a
-        href="results.html?slug=${encodeURIComponent(page.slug)}"
-        class="results-button">
-
-        <span>Live Results</span>
-        <span>↗</span>
-
-    </a>
+    <a href="results.html?slug=${encodeURIComponent(page.slug)}" class="results-link">
+    Live Results ↗
+</a>
 
 </div>
                 </div>
