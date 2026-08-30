@@ -1,152 +1,408 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vote</title>
-    <link rel="stylesheet" href="styles.css">
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Voting Portal</title>
+
+    <link
+        rel="stylesheet"
+        href="styles.css">
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
+
 </head>
+
 
 <body>
 
-<div class="container">
+    <!-- TOP NAVIGATION -->
 
-    <header class="page-header">
-        <h1 id="pageTitle">Loading...</h1>
-        <p id="pageDescription"></p>
+    <header class="top-navigation">
+
+        <div class="brand">
+            <span class="brand-icon">✦</span>
+            <span>Voting Portal</span>
+        </div>
+
+        <a
+            href="admin.html"
+            class="admin-button">
+
+            <span>⚙</span>
+            Admin Panel
+
+        </a>
+
     </header>
 
-    <div id="loading" class="message">
-        Loading voting page...
+
+    <div class="container">
+
+        <!-- HOMEPAGE -->
+
+        <section
+            id="homePage"
+            class="homepage">
+
+            <div class="hero">
+
+                <div class="hero-badge">
+                    ✦ CAST YOUR VOTE
+                </div>
+
+                <h1>
+                    Choose Your
+                    <span>Favourite</span>
+                </h1>
+
+                <p>
+                    Browse the active voting pages below
+                    and make your choice.
+                </p>
+
+            </div>
+
+
+            <div
+                id="homeLoading"
+                class="loading-state">
+
+                Loading voting pages...
+
+            </div>
+
+
+            <div
+                id="homeError"
+                class="message error hidden">
+            </div>
+
+
+            <section
+                id="pagesGrid"
+                class="pages-grid">
+            </section>
+
+
+            <div
+                id="noPages"
+                class="empty-state hidden">
+
+                <div class="empty-icon">
+                    ✦
+                </div>
+
+                <h2>
+                    No active voting pages
+                </h2>
+
+                <p>
+                    There are currently no published
+                    voting pages available.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- VOTING PAGE -->
+
+        <section
+            id="votingPage"
+            class="hidden">
+
+            <button
+                class="back-button"
+                onclick="goHome()">
+
+                ← Back to all voting pages
+
+            </button>
+
+
+            <header class="page-header">
+
+                <div class="hero-badge">
+                    ✦ CAST YOUR VOTE
+                </div>
+
+                <h1 id="pageTitle">
+                    Loading...
+                </h1>
+
+                <p id="pageDescription"></p>
+
+            </header>
+
+
+            <div
+                id="loading"
+                class="loading-state">
+
+                Loading voting page...
+
+            </div>
+
+
+            <div
+                id="errorMessage"
+                class="message error hidden">
+            </div>
+
+
+            <main
+                id="votingContent"
+                class="hidden">
+
+                <section class="images-container">
+
+
+                    <!-- IMAGE 1 -->
+
+                    <div
+                        class="image-option"
+                        id="imageOption1">
+
+                        <h2 id="image1Name"></h2>
+
+                        <div
+                            class="image-wrapper"
+                            onclick="openImage(1)">
+
+                            <img
+                                id="image1"
+                                src=""
+                                alt="Option 1">
+
+                            <div class="view-overlay">
+                                <span>⛶</span>
+                                View Full Size
+                            </div>
+
+                        </div>
+
+
+                        <label class="vote-option">
+
+                            <input
+                                type="radio"
+                                name="vote"
+                                value="1">
+
+                            <span>
+                                Vote for this image
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- IMAGE 2 -->
+
+                    <div
+                        class="image-option"
+                        id="imageOption2">
+
+                        <h2 id="image2Name"></h2>
+
+                        <div
+                            class="image-wrapper"
+                            onclick="openImage(2)">
+
+                            <img
+                                id="image2"
+                                src=""
+                                alt="Option 2">
+
+                            <div class="view-overlay">
+                                <span>⛶</span>
+                                View Full Size
+                            </div>
+
+                        </div>
+
+
+                        <label class="vote-option">
+
+                            <input
+                                type="radio"
+                                name="vote"
+                                value="2">
+
+                            <span>
+                                Vote for this image
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </section>
+
+
+                <!-- VOTE FORM -->
+
+                <section class="voting-form">
+
+                    <div class="form-heading">
+
+                        <span class="form-icon">
+                            ✦
+                        </span>
+
+                        <div>
+
+                            <h2>
+                                Cast Your Vote
+                            </h2>
+
+                            <p>
+                                Your name and vote are required
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <form id="voteForm">
+
+                        <div class="form-group">
+
+                            <label for="voterName">
+                                Your Name <span>*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="voterName"
+                                maxlength="100"
+                                required
+                                placeholder="Enter your name">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="comment">
+                                Comment
+                                <small>
+                                    Optional
+                                </small>
+                            </label>
+
+                            <textarea
+                                id="comment"
+                                maxlength="1000"
+                                placeholder="Tell us what you think...">
+                            </textarea>
+
+                            <div class="character-count">
+                                <span id="characterCount">
+                                    0
+                                </span>
+                                / 1000
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            id="submitVote"
+                            class="submit-button">
+
+                            <span>
+                                Submit My Vote
+                            </span>
+
+                            <span class="button-arrow">
+                                →
+                            </span>
+
+                        </button>
+
+                    </form>
+
+
+                    <div
+                        id="voteMessage"
+                        class="message hidden">
+                    </div>
+
+                </section>
+
+            </main>
+
+        </section>
+
     </div>
 
-    <div id="errorMessage" class="message error hidden"></div>
 
-    <main id="votingContent" class="hidden">
-
-        <section class="images-container">
-
-            <div class="image-option">
-                <h2 id="image1Name"></h2>
-
-                <div class="image-wrapper"
-                     onclick="openImage(1)">
-                    <img id="image1"
-                         src=""
-                         alt="Option 1">
-                </div>
-
-                <label class="vote-option">
-                    <input type="radio"
-                           name="vote"
-                           value="1">
-                    <span>Vote for this image</span>
-                </label>
-            </div>
-
-
-            <div class="image-option">
-                <h2 id="image2Name"></h2>
-
-                <div class="image-wrapper"
-                     onclick="openImage(2)">
-                    <img id="image2"
-                         src=""
-                         alt="Option 2">
-                </div>
-
-                <label class="vote-option">
-                    <input type="radio"
-                           name="vote"
-                           value="2">
-                    <span>Vote for this image</span>
-                </label>
-            </div>
-
-        </section>
-
-
-        <section class="voting-form">
-
-            <h2>Cast Your Vote</h2>
-
-            <form id="voteForm">
-
-                <div class="form-group">
-                    <label for="voterName">
-                        Your Name *
-                    </label>
-
-                    <input
-                        type="text"
-                        id="voterName"
-                        maxlength="100"
-                        required
-                        placeholder="Enter your name">
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="comment">
-                        Comment
-                    </label>
-
-                    <textarea
-                        id="comment"
-                        maxlength="1000"
-                        placeholder="Write a comment (optional)"></textarea>
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    id="submitVote">
-                    Submit Vote
-                </button>
-
-            </form>
-
-            <div id="voteMessage"
-                 class="message hidden">
-            </div>
-
-        </section>
-
-    </main>
-
-</div>
-
-
-<!-- Full screen image viewer -->
-
-<div id="imageModal"
-     class="image-modal hidden">
-
-    <button
-        class="close-modal"
-        onclick="closeImage()">
-        ×
-    </button>
+    <!-- FULL SCREEN IMAGE VIEWER -->
 
     <div
-        id="zoomContainer"
-        class="zoom-container">
+        id="imageModal"
+        class="image-modal hidden">
 
-        <img
-            id="fullImage"
-            src=""
-            alt="Full size image">
+        <button
+            class="close-modal"
+            onclick="closeImage()">
+
+            ×
+
+        </button>
+
+
+        <div class="zoom-controls">
+
+            <button onclick="zoomOut()">
+                −
+            </button>
+
+            <span id="zoomLevel">
+                100%
+            </span>
+
+            <button onclick="zoomIn()">
+                +
+            </button>
+
+            <button onclick="resetZoom()">
+                Reset
+            </button>
+
+        </div>
+
+
+        <div
+            id="zoomContainer"
+            class="zoom-container">
+
+            <img
+                id="fullImage"
+                src=""
+                alt="Full size image">
+
+        </div>
 
     </div>
 
-</div>
 
-
-<script src="app.js"></script>
+    <script src="app.js"></script>
 
 </body>
+
 </html>

@@ -4,6 +4,7 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_mzXpQzrV5FWTFYzMAn9ZGw_Vf9rbD_q";
 
+
 const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
@@ -14,17 +15,25 @@ const supabaseClient =
 let currentPage = null;
 
 let scale = 1;
+
 let translateX = 0;
+
 let translateY = 0;
 
 let startX = 0;
+
 let startY = 0;
 
 let dragging = false;
 
 let initialDistance = 0;
+
 let initialScale = 1;
 
+
+/* =========================================
+   INITIALIZE
+========================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -36,26 +45,34 @@ async function initialize() {
 
     try {
 
-        await ensureAnonymousLogin();
-
         const params =
             new URLSearchParams(
                 window.location.search
             );
 
+
         const slug =
             params.get("slug");
 
 
+        /*
+         No slug means homepage
+        */
+
         if (!slug) {
 
-            showError(
-                "No voting page was specified."
-            );
+            await loadHomepage();
 
             return;
+
         }
 
+
+        /*
+         Slug means individual voting page
+        */
+
+        await ensureAnonymousLogin();
 
         await loadVotingPage(slug);
 
@@ -75,6 +92,206 @@ async function initialize() {
 }
 
 
+/* =========================================
+   HOMEPAGE
+========================================= */
+
+async function loadHomepage() {
+
+    document.title =
+        "Voting Portal";
+
+
+    document.getElementById(
+        "homePage"
+    ).classList.remove("hidden");
+
+
+    document.getElementById(
+        "votingPage"
+    ).classList.add("hidden");
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("voting_pages")
+            .select("*")
+            .eq(
+                "is_published",
+                true
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    document.getElementById(
+        "homeLoading"
+    ).classList.add("hidden");
+
+
+    if (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "homeError"
+        ).textContent =
+            error.message;
+
+        document.getElementById(
+            "homeError"
+        ).classList.remove(
+            "hidden"
+        );
+
+        return;
+
+    }
+
+
+    if (!data || !data.length) {
+
+        document.getElementById(
+            "noPages"
+        ).classList.remove(
+            "hidden"
+        );
+
+        return;
+
+    }
+
+
+    renderVotingPages(data);
+
+}
+
+
+/* =========================================
+   RENDER ALL VOTING PAGES
+========================================= */
+
+function renderVotingPages(pages) {
+
+    const grid =
+        document.getElementById(
+            "pagesGrid"
+        );
+
+
+    grid.innerHTML = "";
+
+
+    pages.forEach(
+        function(page, index) {
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+
+            card.className =
+                "voting-page-card";
+
+
+            card.style.animationDelay =
+                `${index * 0.08}s`;
+
+
+            const link =
+                `index.html?slug=${encodeURIComponent(page.slug)}`;
+
+
+            card.innerHTML = `
+
+                <div class="card-images">
+
+                    <div class="mini-image">
+
+                        <img
+                            src="${escapeHtml(page.image1_url)}"
+                            alt="${escapeHtml(page.image1_name)}">
+
+                    </div>
+
+                    <div class="mini-image">
+
+                        <img
+                            src="${escapeHtml(page.image2_url)}"
+                            alt="${escapeHtml(page.image2_name)}">
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-content">
+
+                    <div class="card-number">
+                        ${String(index + 1).padStart(2, "0")}
+                    </div>
+
+                    <h2>
+                        ${escapeHtml(page.title)}
+                    </h2>
+
+
+                    <div class="card-options">
+
+                        <span>
+                            ${escapeHtml(page.image1_name)}
+                        </span>
+
+                        <span class="versus">
+                            VS
+                        </span>
+
+                        <span>
+                            ${escapeHtml(page.image2_name)}
+                        </span>
+
+                    </div>
+
+
+                    <a
+                        href="${link}"
+                        class="vote-now-button">
+
+                        <span>
+                            Vote Now
+                        </span>
+
+                        <span>
+                            →
+                        </span>
+
+                    </a>
+
+                </div>
+
+            `;
+
+
+            grid.appendChild(card);
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   ANONYMOUS LOGIN
+========================================= */
+
 async function ensureAnonymousLogin() {
 
     const {
@@ -93,7 +310,8 @@ async function ensureAnonymousLogin() {
     const {
         error
     } =
-        await supabaseClient.auth.signInAnonymously();
+        await supabaseClient.auth
+            .signInAnonymously();
 
 
     if (error) {
@@ -105,7 +323,21 @@ async function ensureAnonymousLogin() {
 }
 
 
+/* =========================================
+   LOAD VOTING PAGE
+========================================= */
+
 async function loadVotingPage(slug) {
+
+    document.getElementById(
+        "homePage"
+    ).classList.add("hidden");
+
+
+    document.getElementById(
+        "votingPage"
+    ).classList.remove("hidden");
+
 
     const {
         data,
@@ -114,8 +346,14 @@ async function loadVotingPage(slug) {
         await supabaseClient
             .from("voting_pages")
             .select("*")
-            .eq("slug", slug)
-            .eq("is_published", true)
+            .eq(
+                "slug",
+                slug
+            )
+            .eq(
+                "is_published",
+                true
+            )
             .single();
 
 
@@ -172,13 +410,31 @@ async function loadVotingPage(slug) {
 
     document.getElementById(
         "votingContent"
-    ).classList.remove("hidden");
+    ).classList.remove(
+        "hidden"
+    );
 
 
     await checkExistingVote();
 
 }
 
+
+/* =========================================
+   GO HOME
+========================================= */
+
+function goHome() {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =========================================
+   CHECK EXISTING VOTE
+========================================= */
 
 async function checkExistingVote() {
 
@@ -187,7 +443,8 @@ async function checkExistingVote() {
             user
         }
     } =
-        await supabaseClient.auth.getUser();
+        await supabaseClient.auth
+            .getUser();
 
 
     if (!user) {
@@ -203,14 +460,21 @@ async function checkExistingVote() {
         await supabaseClient
             .from("votes")
             .select("id")
-            .eq("page_id", currentPage.id)
-            .eq("user_id", user.id)
+            .eq(
+                "page_id",
+                currentPage.id
+            )
+            .eq(
+                "user_id",
+                user.id
+            )
             .maybeSingle();
 
 
     if (data) {
 
         disableVotingForm();
+
 
         showVoteMessage(
             "You have already voted on this page.",
@@ -222,31 +486,9 @@ async function checkExistingVote() {
 }
 
 
-function disableVotingForm() {
-
-    document.querySelectorAll(
-        'input[name="vote"]'
-    ).forEach(
-        input => input.disabled = true
-    );
-
-
-    document.getElementById(
-        "voterName"
-    ).disabled = true;
-
-
-    document.getElementById(
-        "comment"
-    ).disabled = true;
-
-
-    document.getElementById(
-        "submitVote"
-    ).disabled = true;
-
-}
-
+/* =========================================
+   VOTING FORM
+========================================= */
 
 document.getElementById(
     "voteForm"
@@ -311,8 +553,9 @@ async function submitVote(event) {
 
     button.disabled = true;
 
-    button.textContent =
-        "Submitting...";
+
+    button.innerHTML =
+        "<span>Submitting...</span><span>✦</span>";
 
 
     try {
@@ -322,7 +565,8 @@ async function submitVote(event) {
                 user
             }
         } =
-            await supabaseClient.auth.getUser();
+            await supabaseClient.auth
+                .getUser();
 
 
         if (!user) {
@@ -369,10 +613,12 @@ async function submitVote(event) {
 
                 disableVotingForm();
 
+
                 showVoteMessage(
                     "You have already voted on this page.",
                     "error"
                 );
+
 
                 return;
 
@@ -388,7 +634,7 @@ async function submitVote(event) {
 
 
         showVoteMessage(
-            "Your vote has been submitted successfully.",
+            "Your vote has been submitted successfully. Thank you!",
             "success"
         );
 
@@ -398,10 +644,12 @@ async function submitVote(event) {
 
         console.error(error);
 
+
         button.disabled = false;
 
-        button.textContent =
-            "Submit Vote";
+
+        button.innerHTML =
+            "<span>Submit My Vote</span><span>→</span>";
 
 
         showVoteMessage(
@@ -414,6 +662,41 @@ async function submitVote(event) {
 
 }
 
+
+/* =========================================
+   DISABLE FORM
+========================================= */
+
+function disableVotingForm() {
+
+    document.querySelectorAll(
+        'input[name="vote"]'
+    ).forEach(
+        input =>
+            input.disabled = true
+    );
+
+
+    document.getElementById(
+        "voterName"
+    ).disabled = true;
+
+
+    document.getElementById(
+        "comment"
+    ).disabled = true;
+
+
+    document.getElementById(
+        "submitVote"
+    ).disabled = true;
+
+}
+
+
+/* =========================================
+   VOTE MESSAGE
+========================================= */
 
 function showVoteMessage(
     message,
@@ -436,12 +719,11 @@ function showVoteMessage(
 }
 
 
+/* =========================================
+   ERROR
+========================================= */
+
 function showError(message) {
-
-    document.getElementById(
-        "loading"
-    ).classList.add("hidden");
-
 
     const element =
         document.getElementById(
@@ -449,21 +731,50 @@ function showError(message) {
         );
 
 
-    element.textContent =
-        message;
+    if (element) {
+
+        element.textContent =
+            message;
+
+        element.classList.remove(
+            "hidden"
+        );
+
+    }
+
+}
 
 
-    element.classList.remove(
-        "hidden"
+/* =========================================
+   COMMENT CHARACTER COUNT
+========================================= */
+
+const commentBox =
+    document.getElementById(
+        "comment"
+    );
+
+
+if (commentBox) {
+
+    commentBox.addEventListener(
+        "input",
+        function() {
+
+            document.getElementById(
+                "characterCount"
+            ).textContent =
+                this.value.length;
+
+        }
     );
 
 }
 
 
-/* ==============================
+/* =========================================
    IMAGE VIEWER
-================================ */
-
+========================================= */
 
 function openImage(number) {
 
@@ -509,6 +820,34 @@ function closeImage() {
 }
 
 
+function zoomIn() {
+
+    scale =
+        Math.min(
+            6,
+            scale + 0.25
+        );
+
+
+    updateImageTransform();
+
+}
+
+
+function zoomOut() {
+
+    scale =
+        Math.max(
+            1,
+            scale - 0.25
+        );
+
+
+    updateImageTransform();
+
+}
+
+
 function resetZoom() {
 
     scale = 1;
@@ -516,6 +855,7 @@ function resetZoom() {
     translateX = 0;
 
     translateY = 0;
+
 
     updateImageTransform();
 
@@ -533,10 +873,26 @@ function updateImageTransform() {
     image.style.transform =
         `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 
+
+    const zoomLevel =
+        document.getElementById(
+            "zoomLevel"
+        );
+
+
+    if (zoomLevel) {
+
+        zoomLevel.textContent =
+            `${Math.round(scale * 100)}%`;
+
+    }
+
 }
 
 
-/* Mouse wheel zoom */
+/* =========================================
+   MOUSE WHEEL ZOOM
+========================================= */
 
 document.getElementById(
     "zoomContainer"
@@ -547,30 +903,28 @@ document.getElementById(
         event.preventDefault();
 
 
-        const amount =
-            event.deltaY < 0
-                ? 0.15
-                : -0.15;
+        if (event.deltaY < 0) {
 
+            zoomIn();
 
-        scale =
-            Math.max(
-                1,
-                Math.min(
-                    6,
-                    scale + amount
-                )
-            );
+        }
 
+        else {
 
-        updateImageTransform();
+            zoomOut();
+
+        }
 
     },
-    { passive: false }
+    {
+        passive: false
+    }
 );
 
 
-/* Touch controls */
+/* =========================================
+   TOUCH ZOOM
+========================================= */
 
 const zoomContainer =
     document.getElementById(
@@ -591,6 +945,7 @@ zoomContainer.addEventListener(
                     event.touches[0],
                     event.touches[1]
                 );
+
 
             initialScale =
                 scale;
@@ -616,7 +971,9 @@ zoomContainer.addEventListener(
         }
 
     },
-    { passive: false }
+    {
+        passive: false
+    }
 );
 
 
@@ -640,7 +997,10 @@ zoomContainer.addEventListener(
 
             scale =
                 initialScale *
-                (distance / initialDistance);
+                (
+                    distance /
+                    initialDistance
+                );
 
 
             scale =
@@ -677,7 +1037,9 @@ zoomContainer.addEventListener(
         }
 
     },
-    { passive: false }
+    {
+        passive: false
+    }
 );
 
 
@@ -717,6 +1079,10 @@ function getDistance(
 }
 
 
+/* =========================================
+   KEYBOARD
+========================================= */
+
 document.addEventListener(
     "keydown",
     function(event) {
@@ -731,3 +1097,39 @@ document.addEventListener(
 
     }
 );
+
+
+/* =========================================
+   HTML ESCAPING
+========================================= */
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
