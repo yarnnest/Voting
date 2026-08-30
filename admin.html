@@ -15,6 +15,158 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
+    <style>
+        /* Admin-only additions. Existing styles.css is left untouched. */
+
+        .admin-vote-management {
+            margin-top: 24px;
+        }
+
+        .admin-vote-management .management-header {
+            margin-bottom: 18px;
+        }
+
+        .admin-vote-management .management-header h2 {
+            margin-bottom: 6px;
+        }
+
+        .admin-vote-management .management-header p {
+            margin: 0;
+            color: #777185;
+        }
+
+        .admin-vote-management .management-select {
+            width: 100%;
+            min-height: 46px;
+            padding: 10px 13px;
+            border: 1px solid rgba(23,19,33,.12);
+            border-radius: 12px;
+            background: #fff;
+            color: #171321;
+            font: inherit;
+        }
+
+        .admin-vote-management .managed-votes-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .admin-vote-management .managed-vote {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 16px;
+            border: 1px solid rgba(23,19,33,.1);
+            border-radius: 15px;
+            background: rgba(255,255,255,.8);
+        }
+
+        .admin-vote-management .managed-vote-main {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .admin-vote-management .managed-vote-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .admin-vote-management .managed-vote-name {
+            font-weight: 900;
+        }
+
+        .admin-vote-management .managed-vote-date {
+            margin-top: 3px;
+            color: #888;
+            font-size: .76rem;
+        }
+
+        .admin-vote-management .managed-vote-choice {
+            flex: 0 0 auto;
+            padding: 5px 9px;
+            border-radius: 999px;
+            background: #f0edff;
+            color: #5d49d4;
+            font-size: .72rem;
+            font-weight: 800;
+        }
+
+        .admin-vote-management .managed-comment {
+            margin-top: 11px;
+            padding: 11px 12px;
+            border-radius: 10px;
+            background: #f8f7fa;
+            color: #39333f;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            line-height: 1.5;
+        }
+
+        .admin-vote-management .managed-no-comment {
+            margin-top: 11px;
+            color: #999;
+            font-size: .8rem;
+            font-style: italic;
+        }
+
+        .admin-vote-management .managed-actions {
+            display: flex;
+            flex: 0 0 auto;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .admin-vote-management .remove-comment-button,
+        .admin-vote-management .delete-vote-button {
+            border: 0;
+            border-radius: 9px;
+            padding: 9px 11px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .admin-vote-management .remove-comment-button {
+            background: #fff3d8;
+            color: #7a5200;
+        }
+
+        .admin-vote-management .delete-vote-button {
+            background: #ffe3e3;
+            color: #a12626;
+        }
+
+        .admin-vote-management .remove-comment-button:hover,
+        .admin-vote-management .delete-vote-button:hover {
+            filter: brightness(.97);
+        }
+
+        .admin-vote-management .management-empty,
+        .admin-vote-management .management-loading {
+            padding: 24px;
+            text-align: center;
+            border: 1px dashed rgba(23,19,33,.15);
+            border-radius: 13px;
+            color: #777;
+        }
+
+        @media (max-width: 700px) {
+            .admin-vote-management .managed-vote,
+            .admin-vote-management .managed-vote-top {
+                flex-direction: column;
+            }
+
+            .admin-vote-management .managed-actions {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+
 </head>
 
 
@@ -269,6 +421,30 @@
                 </div>
 
             </form>
+
+        </section>
+
+
+        <section class="admin-card admin-vote-management">
+
+            <div class="management-header">
+                <h2>Manage Votes &amp; Comments</h2>
+                <p>Review submissions and remove a comment or an entire vote when necessary.</p>
+            </div>
+
+            <select
+                id="managementPageSelect"
+                class="management-select">
+                <option value="">Select a voting page</option>
+            </select>
+
+            <div
+                id="managedVotesList"
+                class="managed-votes-list">
+                <div class="management-empty">
+                    Select a voting page to review its submissions.
+                </div>
+            </div>
 
         </section>
 

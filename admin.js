@@ -72,6 +72,7 @@ async function showAdmin() {
 
 
     await loadPages();
+    populateManagementPages();
 
 }
 
@@ -180,6 +181,7 @@ async function loadPages() {
     pages = data || [];
 
     renderPages();
+    populateManagementPages();
 
 }
 
@@ -854,3 +856,395 @@ function escapeHtml(
         );
 
 }
+
+/* ==============================
+   VOTE AND COMMENT MANAGEMENT
+================================ */
+
+function populateManagementPages() {
+
+    const select =
+        document.getElementById(
+            "managementPageSelect"
+        );
+
+    if (!select) {
+        return;
+    }
+
+    const previousValue =
+        select.value;
+
+    select.innerHTML =
+        `
+        <option value="">
+            Select a voting page
+        </option>
+        `;
+
+    pages.forEach(
+        page => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                page.id;
+
+            option.textContent =
+                page.title;
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+    if (
+        previousValue &&
+        pages.some(
+            page =>
+                page.id === previousValue
+        )
+    ) {
+
+        select.value =
+            previousValue;
+
+        loadManagedVotes(
+            previousValue
+        );
+
+    }
+}
+
+const managementPageSelect =
+    document.getElementById(
+        "managementPageSelect"
+    );
+
+if (managementPageSelect) {
+
+    managementPageSelect.addEventListener(
+        "change",
+        function() {
+
+            if (!this.value) {
+
+                document.getElementById(
+                    "managedVotesList"
+                ).innerHTML =
+                    `
+                    <div class="management-empty">
+                        Select a voting page to review its submissions.
+                    </div>
+                    `;
+
+                return;
+            }
+
+            loadManagedVotes(
+                this.value
+            );
+
+        }
+    );
+}
+
+async function loadManagedVotes(
+    pageId
+) {
+
+    const container =
+        document.getElementById(
+            "managedVotesList"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML =
+        `
+        <div class="management-loading">
+            Loading submissions...
+        </div>
+        `;
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("votes")
+            .select(
+                "id, voter_name, vote, comment, created_at"
+            )
+            .eq(
+                "page_id",
+                pageId
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+    if (error) {
+
+        console.error(error);
+
+        container.innerHTML =
+            `
+            <div class="management-empty">
+                Unable to load submissions:
+                ${escapeHtml(error.message)}
+            </div>
+            `;
+
+        return;
+    }
+
+    const selectedPage =
+        pages.find(
+            page =>
+                page.id === pageId
+        );
+
+    if (!data || !data.length) {
+
+        container.innerHTML =
+            `
+            <div class="management-empty">
+                No votes have been submitted for this page yet.
+            </div>
+            `;
+
+        return;
+    }
+
+    container.innerHTML =
+        data
+            .map(
+                vote =>
+                    renderManagedVote(
+                        vote,
+                        selectedPage
+                    )
+            )
+            .join("");
+}
+
+function renderManagedVote(
+    vote,
+    page
+) {
+
+    const voterName =
+        vote.voter_name &&
+        vote.voter_name.trim()
+            ? vote.voter_name.trim()
+            : "Anonymous";
+
+    const voteNumber =
+        Number(vote.vote);
+
+    const voteChoice =
+        voteNumber === 1
+            ? page.image1_name
+            : page.image2_name;
+
+    const comment =
+        vote.comment &&
+        vote.comment.trim()
+            ? vote.comment.trim()
+            : "";
+
+    return `
+        <article class="managed-vote">
+
+            <div class="managed-vote-main">
+
+                <div class="managed-vote-top">
+
+                    <div>
+                        <div class="managed-vote-name">
+                            ${escapeHtml(voterName)}
+                        </div>
+
+                        <div class="managed-vote-date">
+                            ${escapeHtml(
+                                formatAdminDate(
+                                    vote.created_at
+                                )
+                            )}
+                        </div>
+                    </div>
+
+                    <span class="managed-vote-choice">
+                        Voted for
+                        ${escapeHtml(voteChoice)}
+                    </span>
+
+                </div>
+
+                ${
+                    comment
+                        ? `
+                            <div class="managed-comment">
+                                ${escapeHtml(comment)}
+                            </div>
+                        `
+                        : `
+                            <div class="managed-no-comment">
+                                No comment submitted
+                            </div>
+                        `
+                }
+
+            </div>
+
+            <div class="managed-actions">
+
+                ${
+                    comment
+                        ? `
+                            <button
+                                type="button"
+                                class="remove-comment-button"
+                                onclick="removeVoteComment('${vote.id}', '${page.id}')">
+                                Remove Comment
+                            </button>
+                        `
+                        : ""
+                }
+
+                <button
+                    type="button"
+                    class="delete-vote-button"
+                    onclick="deleteManagedVote('${vote.id}', '${page.id}')">
+                    Delete Vote
+                </button>
+
+            </div>
+
+        </article>
+    `;
+}
+
+async function removeVoteComment(
+    voteId,
+    pageId
+) {
+
+    if (
+        !confirm(
+            "Remove this comment? The vote will remain."
+        )
+    ) {
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("votes")
+            .update({
+                comment: null
+            })
+            .eq(
+                "id",
+                voteId
+            );
+
+    if (error) {
+
+        alert(
+            "Unable to remove the comment: " +
+            error.message
+        );
+
+        return;
+    }
+
+    await loadManagedVotes(
+        pageId
+    );
+
+    await loadPages();
+}
+
+async function deleteManagedVote(
+    voteId,
+    pageId
+) {
+
+    if (
+        !confirm(
+            "Delete this vote and its comment? This cannot be undone."
+        )
+    ) {
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("votes")
+            .delete()
+            .eq(
+                "id",
+                voteId
+            );
+
+    if (error) {
+
+        alert(
+            "Unable to delete the vote: " +
+            error.message
+        );
+
+        return;
+    }
+
+    await loadManagedVotes(
+        pageId
+    );
+
+    await loadPages();
+}
+
+function formatAdminDate(
+    date
+) {
+
+    if (!date) {
+        return "";
+    }
+
+    const parsed =
+        new Date(date);
+
+    if (
+        Number.isNaN(
+            parsed.getTime()
+        )
+    ) {
+        return "";
+    }
+
+    return parsed.toLocaleString(
+        undefined,
+        {
+            dateStyle: "medium",
+            timeStyle: "short"
+        }
+    );
+}
+
