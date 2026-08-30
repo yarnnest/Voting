@@ -190,7 +190,7 @@ function renderVotingPages(pages) {
 
 
     pages.forEach(
-        function(page, index) {
+        function (page, index) {
 
             const card =
                 document.createElement(
@@ -261,20 +261,27 @@ function renderVotingPages(pages) {
                     </div>
 
 
-                    <a
-                        href="${link}"
-                        class="vote-now-button">
+                    <div class="card-actions">
 
-                        <span>
-                            Vote Now
-                        </span>
+    <a
+        href="${link}"
+        class="vote-now-button">
 
-                        <span>
-                            →
-                        </span>
+        <span>Vote Now</span>
+        <span>→</span>
 
-                    </a>
+    </a>
 
+    <a
+        href="results.html?slug=${encodeURIComponent(page.slug)}"
+        class="results-button">
+
+        <span>Live Results</span>
+        <span>↗</span>
+
+    </a>
+
+</div>
                 </div>
 
             `;
@@ -759,7 +766,7 @@ if (commentBox) {
 
     commentBox.addEventListener(
         "input",
-        function() {
+        function () {
 
             document.getElementById(
                 "characterCount"
@@ -898,7 +905,7 @@ document.getElementById(
     "zoomContainer"
 ).addEventListener(
     "wheel",
-    function(event) {
+    function (event) {
 
         event.preventDefault();
 
@@ -934,7 +941,7 @@ const zoomContainer =
 
 zoomContainer.addEventListener(
     "touchstart",
-    function(event) {
+    function (event) {
 
         if (
             event.touches.length === 2
@@ -979,7 +986,7 @@ zoomContainer.addEventListener(
 
 zoomContainer.addEventListener(
     "touchmove",
-    function(event) {
+    function (event) {
 
         event.preventDefault();
 
@@ -1045,7 +1052,7 @@ zoomContainer.addEventListener(
 
 zoomContainer.addEventListener(
     "touchend",
-    function() {
+    function () {
 
         dragging = false;
 
@@ -1085,7 +1092,7 @@ function getDistance(
 
 document.addEventListener(
     "keydown",
-    function(event) {
+    function (event) {
 
         if (
             event.key === "Escape"
