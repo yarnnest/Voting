@@ -270,12 +270,13 @@ function renderVotingPages(pages) {
         <span>Vote Now</span>
         <span>→</span>
 
-    </a>
+    </a>    
 
-    <a href="results.html?slug=${encodeURIComponent(page.slug)}" class="results-link">
-    Live Results ↗
+    <a
+    href="results.html?slug=${encodeURIComponent(page.slug)}"
+    class="results-link">
+    Live Results
 </a>
-
 </div>
                 </div>
 

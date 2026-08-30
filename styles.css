@@ -2734,3 +2734,30 @@ textarea:focus-visible {
     }
 
 }
+
+.results-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 9px 18px;
+    border-radius: 999px;
+    background: #f1f1f3;
+    color: #171717;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.results-link:hover {
+    background: #171717;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.results-link::after {
+    content: "↗";
+    margin-left: 6px;
+    font-size: 12px;
+}
