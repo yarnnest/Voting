@@ -1,270 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Results</title>
-
-    <link
-        rel="stylesheet"
-        href="styles.css">
-
-    <script
-        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-    </script>
-
+    <link rel="stylesheet" href="results.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-
 <body>
-
 <header class="top-navigation">
-
-    <a
-        href="index.html"
-        class="brand"
-        style="text-decoration:none;">
-
-        <span class="brand-icon">
-            ✦
-        </span>
-
-        <span>
-            Voting Portal
-        </span>
-
+    <a href="index.html" class="brand" style="text-decoration:none;">
+        <span class="brand-icon">✦</span>
+        <span>Voting Portal</span>
     </a>
-
-
-    <a
-        href="admin.html"
-        class="admin-button">
-
-        ⚙ Admin Panel
-
-    </a>
-
+    <a href="admin.html" class="admin-button">⚙ Admin Panel</a>
 </header>
 
-
 <main class="container">
-
-    <button
-        class="back-button"
-        onclick="window.location.href='index.html'">
-
-        ← All Voting Pages
-
-    </button>
-
+    <button class="back-button" onclick="window.location.href='index.html'">← All Voting Pages</button>
 
     <section class="page-header">
-
-        <div class="hero-badge">
-            ✦ LIVE RESULTS
-        </div>
-
-        <h1 id="resultTitle">
-            Loading...
-        </h1>
-
-        <p>
-            Results update automatically as votes are submitted.
-        </p>
-
+        <div class="hero-badge">✦ LIVE RESULTS</div>
+        <h1 id="resultTitle">Loading...</h1>
+        <p>Live vote totals, percentages and voter comments.</p>
     </section>
 
+    <div id="loadingResults" class="loading-state">Loading live results...</div>
+    <div id="resultsError" class="message error hidden"></div>
 
-    <div
-        id="loadingResults"
-        class="loading-state">
-
-        Loading live results...
-
-    </div>
-
-
-    <div
-        id="resultsError"
-        class="message error hidden">
-    </div>
-
-
-    <section
-        id="resultsContent"
-        class="hidden">
-
-
-        <!-- WINNER -->
-
+    <section id="resultsContent" class="hidden">
         <div class="winner-card">
-
-            <div class="winner-label">
-                CURRENT LEADER
-            </div>
-
-            <div
-                id="winnerName"
-                class="winner-name">
-
-                Loading...
-
-            </div>
-
-            <div
-                id="winnerVotes"
-                class="winner-votes">
-
-                0 votes
-
-            </div>
-
-            <div
-                id="winnerStatus"
-                class="winner-status">
-
-            </div>
-
+            <div class="winner-label">CURRENT LEADER</div>
+            <div id="winnerName" class="winner-name">Loading...</div>
+            <div id="winnerVotes" class="winner-votes">0 votes</div>
+            <div id="winnerStatus" class="winner-status"></div>
         </div>
-
-
-        <!-- LIVE COUNTS -->
 
         <div class="live-results-grid">
-
-
             <div class="result-option">
-
                 <div class="result-option-top">
-
-                    <h2 id="resultImage1Name">
-                        Image 1
-                    </h2>
-
-                    <strong id="resultVote1">
-                        0
-                    </strong>
-
+                    <h2 id="resultImage1Name">Image 1</h2>
+                    <strong id="resultVote1">0</strong>
                 </div>
-
-
-                <div class="result-bar">
-
-                    <div
-                        id="resultBar1"
-                        class="result-bar-fill">
-                    </div>
-
-                </div>
-
-
+                <img id="resultImage1" class="result-image" src="" alt="">
+                <div class="result-bar"><div id="resultBar1" class="result-bar-fill"></div></div>
                 <div class="result-percentage">
-
-                    <span>
-                        <span id="resultPercentage1">
-                            0
-                        </span>%
-                    </span>
-
-                    <span>
-                        votes
-                    </span>
-
+                    <span><span id="resultPercentage1">0</span>%</span>
+                    <span>votes</span>
                 </div>
-
             </div>
 
-
             <div class="result-option">
-
                 <div class="result-option-top">
-
-                    <h2 id="resultImage2Name">
-                        Image 2
-                    </h2>
-
-                    <strong id="resultVote2">
-                        0
-                    </strong>
-
+                    <h2 id="resultImage2Name">Image 2</h2>
+                    <strong id="resultVote2">0</strong>
                 </div>
-
-
-                <div class="result-bar">
-
-                    <div
-                        id="resultBar2"
-                        class="result-bar-fill">
-                    </div>
-
-                </div>
-
-
+                <img id="resultImage2" class="result-image" src="" alt="">
+                <div class="result-bar"><div id="resultBar2" class="result-bar-fill"></div></div>
                 <div class="result-percentage">
-
-                    <span>
-                        <span id="resultPercentage2">
-                            0
-                        </span>%
-                    </span>
-
-                    <span>
-                        votes
-                    </span>
-
+                    <span><span id="resultPercentage2">0</span>%</span>
+                    <span>votes</span>
                 </div>
-
             </div>
-
         </div>
 
-
-        <!-- COMMENTS -->
-
         <section class="comments-section">
-
             <div class="comments-heading">
-
                 <div>
-
-                    <div class="hero-badge">
-                        ✦ VOICE OF THE VOTERS
-                    </div>
-
-                    <h2>
-                        Recent Comments
-                    </h2>
-
+                    <div class="hero-badge">✦ VOICE OF THE VOTERS</div>
+                    <h2>Recent Comments</h2>
                 </div>
-
-                <span
-                    id="commentCount">
-                    0 comments
-                </span>
-
+                <span id="commentCount">0 comments</span>
             </div>
-
-
-            <div
-                id="commentsList"
-                class="comments-list">
-
-            </div>
-
+            <div id="commentsList" class="comments-list"></div>
         </section>
-
     </section>
-
 </main>
-
-
 <script src="results.js"></script>
-
 </body>
-
 </html>
