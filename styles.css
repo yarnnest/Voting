@@ -2931,8 +2931,7 @@ body::before {
 
     will-change: transform;
 
-    animation:
-        liquidSlide 11s linear infinite;
+    animation: liquidSlide 4s linear infinite;
 }
 
 
@@ -2992,8 +2991,7 @@ body::after {
 
     will-change: transform;
 
-    animation:
-        liquidSlideReverse 15s linear infinite;
+    animation: liquidSlideReverse 5s linear infinite;
 }
 
 
@@ -3108,7 +3106,7 @@ body::after {
 
         opacity: 0.78;
 
-        animation-duration: 9s;
+        animation-duration: 3.5s;
     }
 
     body::after {
@@ -3124,6 +3122,6 @@ body::after {
 
         opacity: 0.60;
 
-        animation-duration: 12s;
+        animation-duration: 4.5s;
     }
 }
