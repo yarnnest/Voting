@@ -2854,34 +2854,48 @@ textarea:focus-visible {
 
 
 
-
-
-
 /* =========================================================
-   LIQUID BACKGROUND
+   LIQUID WATER BACKGROUND
    ========================================================= */
 
-#liquidBackground {
+html {
+    background: #f7f5ff !important;
+}
+
+body {
+    background: #f7f5ff !important;
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+
+/* Canvas */
+
+#liquid-bg {
     position: fixed;
+
     left: 0;
     top: 0;
+
     width: 100vw;
     height: 100vh;
 
     display: block;
 
-    z-index: 0;
+    margin: 0;
+    padding: 0;
+
     pointer-events: none;
+
+    z-index: 0;
 }
 
-/* Keep the website above the liquid */
 
-body {
-    position: relative;
-    background: #f7f5ff;
-}
+/* Website stays above the water */
 
-body > *:not(#liquidBackground) {
+.top-navigation,
+.container {
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }

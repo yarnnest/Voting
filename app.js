@@ -1149,46 +1149,49 @@ function escapeHtml(value) {
 
 
 
-
 /* =========================================================
-   PEACEFUL LIQUID FLOW
-   Lightweight Canvas Animation
+   LIQUID WATER BACKGROUND
    ========================================================= */
 
 (function () {
 
-    const canvas = document.getElementById("liquidBackground");
+    const canvas = document.getElementById("liquid-bg");
 
     if (!canvas) {
-        console.log("Liquid canvas not found");
+        console.error("Liquid background canvas not found.");
         return;
     }
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", {
+        alpha: false
+    });
 
     let width = 0;
     let height = 0;
 
     let dpr = 1;
 
-    let animationId = null;
+    let animationFrame = null;
 
     let time = 0;
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        RESIZE
-       ----------------------------------------------------- */
+       ===================================================== */
 
-    function resize() {
+    function resizeCanvas() {
 
-        dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        dpr = Math.min(
+            window.devicePixelRatio || 1,
+            1.5
+        );
 
         width = window.innerWidth;
         height = window.innerHeight;
 
-        canvas.width = Math.round(width * dpr);
-        canvas.height = Math.round(height * dpr);
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
 
         canvas.style.width = width + "px";
         canvas.style.height = height + "px";
@@ -1206,21 +1209,21 @@ function escapeHtml(value) {
 
     window.addEventListener(
         "resize",
-        resize,
+        resizeCanvas,
         { passive: true }
     );
 
 
-    resize();
+    resizeCanvas();
 
 
-    /* -----------------------------------------------------
-       SMOOTH LIQUID CURVE
-       ----------------------------------------------------- */
+    /* =====================================================
+       LIQUID CURVE
+       ===================================================== */
 
-    function liquidY(
+    function liquidWave(
         x,
-        base,
+        baseY,
         amplitude,
         frequency,
         speed,
@@ -1228,7 +1231,7 @@ function escapeHtml(value) {
     ) {
 
         return (
-            base
+            baseY
 
             + Math.sin(
                 x * frequency
@@ -1237,26 +1240,26 @@ function escapeHtml(value) {
             ) * amplitude
 
             + Math.sin(
-                x * frequency * 0.47
-                - time * speed * 0.53
-                + phase
-            ) * amplitude * 0.45
+                x * frequency * 0.43
+                - time * speed * 0.55
+                + phase * 1.4
+            ) * amplitude * 0.35
 
             + Math.sin(
                 x * frequency * 0.19
-                + time * speed * 0.27
-                + phase
-            ) * amplitude * 0.25
+                + time * speed * 0.3
+                + phase * 2
+            ) * amplitude * 0.18
         );
     }
 
 
-    /* -----------------------------------------------------
-       DRAW LIQUID SHAPE
-       ----------------------------------------------------- */
+    /* =====================================================
+       DRAW ONE LIQUID LAYER
+       ===================================================== */
 
-    function drawLiquid(
-        base,
+    function drawLiquidLayer(
+        baseY,
         amplitude,
         frequency,
         speed,
@@ -1266,22 +1269,22 @@ function escapeHtml(value) {
     ) {
 
         const step = Math.max(
-            12,
-            width / 90
+            14,
+            width / 85
         );
 
         ctx.beginPath();
 
 
-        /* Top edge */
+        /* TOP EDGE */
 
         let x = -step;
 
         ctx.moveTo(
             x,
-            liquidY(
+            liquidWave(
                 x,
-                base,
+                baseY,
                 amplitude,
                 frequency,
                 speed,
@@ -1296,20 +1299,23 @@ function escapeHtml(value) {
             x += step
         ) {
 
-            const y = liquidY(
+            const y = liquidWave(
                 x,
-                base,
+                baseY,
                 amplitude,
                 frequency,
                 speed,
                 phase
             );
 
-            ctx.lineTo(x, y);
+            ctx.lineTo(
+                x,
+                y
+            );
         }
 
 
-        /* Bottom edge */
+        /* BOTTOM EDGE */
 
         for (
             x = width + step;
@@ -1318,9 +1324,9 @@ function escapeHtml(value) {
         ) {
 
             const y =
-                liquidY(
+                liquidWave(
                     x,
-                    base,
+                    baseY,
                     amplitude,
                     frequency,
                     speed,
@@ -1328,7 +1334,10 @@ function escapeHtml(value) {
                 )
                 + thickness;
 
-            ctx.lineTo(x, y);
+            ctx.lineTo(
+                x,
+                y
+            );
         }
 
 
@@ -1340,21 +1349,21 @@ function escapeHtml(value) {
     }
 
 
-    /* -----------------------------------------------------
-       ANIMATION
-       ----------------------------------------------------- */
+    /* =====================================================
+       MAIN ANIMATION
+       ===================================================== */
 
     function animate() {
 
         /*
-         * Slow enough to look like liquid,
-         * fast enough to visibly move.
+         * Small time increment keeps the movement
+         * smooth without creating unnecessary CPU load.
          */
 
-        time += 0.012;
+        time += 0.018;
 
 
-        /* Base */
+        /* BASE */
 
         ctx.fillStyle = "#f7f5ff";
 
@@ -1366,99 +1375,83 @@ function escapeHtml(value) {
         );
 
 
-        /* -------------------------------------------------
-           BACK LIQUID
-           ------------------------------------------------- */
+        /* =================================================
+           PURPLE WATER
+           ================================================= */
 
-        drawLiquid(
+        drawLiquidLayer(
             height * 0.12,
-            height * 0.075,
-            0.0045,
+            height * 0.055,
+            0.0042,
             0.75,
             0,
-            height * 0.28,
-            "#e3d7ff"
-        );
-
-
-        /* -------------------------------------------------
-           PURPLE CURRENT
-           ------------------------------------------------- */
-
-        drawLiquid(
-            height * 0.29,
-            height * 0.085,
-            0.0042,
-            0.92,
-            2,
-            height * 0.25,
-            "#d0bcff"
-        );
-
-
-        /* -------------------------------------------------
-           LIGHT PINK CURRENT
-           ------------------------------------------------- */
-
-        drawLiquid(
-            height * 0.51,
-            height * 0.07,
-            0.0048,
-            0.78,
-            4,
             height * 0.22,
-            "#ead9f4"
+            "#ded0ff"
         );
 
 
-        /* -------------------------------------------------
-           LOWER PURPLE CURRENT
-           ------------------------------------------------- */
+        /* =================================================
+           MAIN VIOLET FLOW
+           ================================================= */
 
-        drawLiquid(
+        drawLiquidLayer(
+            height * 0.30,
+            height * 0.065,
+            0.0048,
+            0.95,
+            2.2,
+            height * 0.22,
+            "#c9b4f5"
+        );
+
+
+        /* =================================================
+           PINK CURRENT
+           ================================================= */
+
+        drawLiquidLayer(
+            height * 0.50,
+            height * 0.05,
+            0.005,
+            0.82,
+            4.1,
+            height * 0.19,
+            "#e8d5ee"
+        );
+
+
+        /* =================================================
+           LOWER VIOLET FLOW
+           ================================================= */
+
+        drawLiquidLayer(
             height * 0.70,
-            height * 0.08,
-            0.004,
-            0.68,
-            1.5,
-            height * 0.24,
-            "#ded0f5"
-        );
-
-
-        /*
-         * Very light flowing separation.
-         * This gives the water its layered appearance
-         * without using blur.
-         */
-
-        drawLiquid(
-            height * 0.43,
-            height * 0.035,
+            height * 0.06,
             0.0045,
-            1.1,
-            3,
-            height * 0.035,
-            "#ffffff"
+            0.72,
+            1.4,
+            height * 0.22,
+            "#d7c4f2"
         );
 
 
-        animationId = requestAnimationFrame(
-            animate
-        );
+        animationFrame =
+            requestAnimationFrame(
+                animate
+            );
     }
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        START
-       ----------------------------------------------------- */
+       ===================================================== */
 
     animate();
 
 
-    /* -----------------------------------------------------
-       SAVE PERFORMANCE WHEN TAB IS HIDDEN
-       ----------------------------------------------------- */
+    /* =====================================================
+       SAVE BATTERY WHEN TAB IS HIDDEN
+       ===================================================== */
 
     document.addEventListener(
         "visibilitychange",
@@ -1466,23 +1459,22 @@ function escapeHtml(value) {
 
             if (document.hidden) {
 
-                if (animationId !== null) {
+                if (animationFrame !== null) {
 
                     cancelAnimationFrame(
-                        animationId
+                        animationFrame
                     );
 
-                    animationId = null;
+                    animationFrame = null;
                 }
 
             } else {
 
-                if (animationId === null) {
+                if (animationFrame === null) {
 
                     animate();
                 }
             }
-
         }
     );
 
