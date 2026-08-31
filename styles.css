@@ -2853,7 +2853,7 @@ textarea:focus-visible {
 
 
  /* =========================================================
-   FINAL SOFT LIQUID BACKGROUND
+   MOVING LIQUID GRADIENT
    ========================================================= */
 
 html,
@@ -2867,93 +2867,128 @@ body {
 
     background:
         radial-gradient(
-            900px 600px at 15% 35%,
-            rgba(125, 78, 230, 0.20),
+            ellipse 65% 55% at 15% 35%,
+            rgba(105, 65, 225, 0.24),
             transparent 70%
         ),
         radial-gradient(
-            900px 600px at 85% 65%,
-            rgba(210, 105, 220, 0.18),
+            ellipse 60% 50% at 85% 65%,
+            rgba(220, 90, 215, 0.20),
             transparent 70%
         ),
         #f7f5fb;
 }
 
 
-/* Main moving liquid */
+/* =========================================================
+   MAIN LIQUID LAYER
+   ========================================================= */
 
 body::before {
     content: "";
 
     position: fixed;
 
-    z-index: 0;
+    width: 140vw;
+    height: 110vh;
+
+    left: -20vw;
+    top: 60px;
+
     pointer-events: none;
-
-    width: 120vw;
-    height: 90vh;
-
-    left: -10vw;
-    top: 80px;
+    z-index: 0;
 
     background:
         radial-gradient(
-            ellipse 45% 35% at 18% 48%,
-            rgba(103, 62, 225, 0.30),
-            transparent 72%
+            ellipse 42% 34% at 12% 45%,
+            rgba(101, 55, 225, 0.42),
+            transparent 70%
         ),
+
         radial-gradient(
-            ellipse 48% 38% at 82% 52%,
-            rgba(202, 86, 220, 0.26),
-            transparent 72%
+            ellipse 40% 32% at 35% 25%,
+            rgba(177, 65, 230, 0.34),
+            transparent 70%
         ),
+
         radial-gradient(
-            ellipse 42% 30% at 52% 25%,
-            rgba(154, 77, 230, 0.18),
+            ellipse 40% 34% at 58% 65%,
+            rgba(40, 125, 235, 0.30),
+            transparent 70%
+        ),
+
+        radial-gradient(
+            ellipse 38% 32% at 82% 35%,
+            rgba(30, 190, 145, 0.27),
+            transparent 70%
+        ),
+
+        radial-gradient(
+            ellipse 42% 34% at 72% 78%,
+            rgba(225, 85, 195, 0.28),
             transparent 70%
         );
 
-    filter: blur(45px);
+    filter: blur(42px);
 
-    opacity: 0.85;
+    opacity: 0.9;
 
-    animation: liquidFlow 14s ease-in-out infinite alternate;
+    transform: translate3d(0, 0, 0);
+
+    animation: liquidMove 10s ease-in-out infinite alternate;
 }
 
 
-/* Secondary movement */
+/* =========================================================
+   SECOND LIQUID LAYER
+   ========================================================= */
 
 body::after {
     content: "";
 
     position: fixed;
 
-    z-index: 0;
+    width: 145vw;
+    height: 105vh;
+
+    left: -22vw;
+    top: 70px;
+
     pointer-events: none;
-
-    width: 110vw;
-    height: 85vh;
-
-    left: -5vw;
-    top: 100px;
+    z-index: 0;
 
     background:
         radial-gradient(
-            ellipse 38% 30% at 75% 25%,
-            rgba(116, 72, 235, 0.18),
-            transparent 70%
+            ellipse 38% 30% at 20% 70%,
+            rgba(65, 95, 235, 0.25),
+            transparent 68%
         ),
+
         radial-gradient(
-            ellipse 40% 32% at 25% 75%,
-            rgba(226, 105, 216, 0.15),
-            transparent 70%
+            ellipse 40% 32% at 48% 20%,
+            rgba(150, 65, 235, 0.24),
+            transparent 68%
+        ),
+
+        radial-gradient(
+            ellipse 38% 30% at 78% 55%,
+            rgba(35, 180, 150, 0.24),
+            transparent 68%
+        ),
+
+        radial-gradient(
+            ellipse 40% 32% at 88% 20%,
+            rgba(230, 90, 190, 0.22),
+            transparent 68%
         );
 
-    filter: blur(55px);
+    filter: blur(48px);
 
     opacity: 0.75;
 
-    animation: liquidFlowReverse 18s ease-in-out infinite alternate;
+    transform: translate3d(0, 0, 0);
+
+    animation: liquidMoveReverse 13s ease-in-out infinite alternate;
 }
 
 
@@ -2961,63 +2996,83 @@ body::after {
    LIQUID MOTION
    ========================================================= */
 
-@keyframes liquidFlow {
+@keyframes liquidMove {
 
     0% {
-        transform:
-            translate3d(-4%, 0, 0)
-            scale(1);
-    }
-
-    25% {
-        transform:
-            translate3d(2%, 3%, 0)
-            scale(1.04);
-    }
-
-    50% {
-        transform:
-            translate3d(5%, -2%, 0)
-            scale(1.07);
-    }
-
-    75% {
-        transform:
-            translate3d(-2%, 4%, 0)
-            scale(1.04);
-    }
-
-    100% {
         transform:
             translate3d(-5%, -2%, 0)
             scale(1);
     }
-}
 
-
-@keyframes liquidFlowReverse {
-
-    0% {
+    20% {
         transform:
-            translate3d(4%, 2%, 0)
-            scale(1.03);
+            translate3d(3%, 4%, 0)
+            scale(1.04);
     }
 
-    50% {
+    40% {
         transform:
-            translate3d(-4%, -3%, 0)
+            translate3d(8%, -3%, 0)
+            scale(1.07);
+    }
+
+    60% {
+        transform:
+            translate3d(2%, 6%, 0)
+            scale(1.05);
+    }
+
+    80% {
+        transform:
+            translate3d(-6%, 2%, 0)
             scale(1.08);
     }
 
     100% {
         transform:
-            translate3d(3%, 4%, 0)
+            translate3d(-2%, -5%, 0)
+            scale(1);
+    }
+}
+
+
+@keyframes liquidMoveReverse {
+
+    0% {
+        transform:
+            translate3d(6%, 3%, 0)
+            scale(1.02);
+    }
+
+    25% {
+        transform:
+            translate3d(-3%, -5%, 0)
+            scale(1.07);
+    }
+
+    50% {
+        transform:
+            translate3d(-8%, 4%, 0)
+            scale(1.04);
+    }
+
+    75% {
+        transform:
+            translate3d(4%, -2%, 0)
+            scale(1.08);
+    }
+
+    100% {
+        transform:
+            translate3d(7%, 5%, 0)
             scale(1.02);
     }
 }
 
 
-/* Keep actual website above liquid */
+/* =========================================================
+   KEEP WEBSITE CONTENT ABOVE THE LIQUID
+   ========================================================= */
 
 .top-navigation,
 .container {
@@ -3033,30 +3088,30 @@ body::after {
 @media (max-width: 600px) {
 
     body::before {
-        width: 180vw;
-        height: 100vh;
+        width: 190vw;
+        height: 120vh;
 
-        left: -40vw;
-        top: 70px;
+        left: -45vw;
+        top: 60px;
 
-        filter: blur(38px);
+        filter: blur(35px);
 
-        opacity: 0.78;
+        opacity: 0.82;
 
-        animation-duration: 12s;
+        animation-duration: 8s;
     }
 
     body::after {
-        width: 170vw;
-        height: 100vh;
+        width: 190vw;
+        height: 120vh;
 
-        left: -35vw;
-        top: 80px;
+        left: -45vw;
+        top: 70px;
 
-        filter: blur(45px);
+        filter: blur(40px);
 
-        opacity: 0.68;
+        opacity: 0.70;
 
-        animation-duration: 15s;
+        animation-duration: 10s;
     }
-}   
+}
