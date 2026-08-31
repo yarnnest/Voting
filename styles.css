@@ -473,26 +473,25 @@ img {
 ========================================================= */
 
 .voting-page-card {
-    overflow:
-        hidden;
+    position: relative;
+    overflow: hidden;
 
-    background:
-        #ffffff;
+    background: rgba(255, 255, 255, 0.24);
 
-    border:
-        1px solid rgba(0, 0, 0, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.48);
 
-    border-radius:
-        24px;
+    border-radius: 24px;
 
     box-shadow:
-        0 12px 35px rgba(0, 0, 0, 0.07);
+        0 18px 45px rgba(70, 50, 100, 0.10),
+        inset 0 1px 0 rgba(255, 255, 255, 0.55);
 
-    opacity:
-        0;
+    backdrop-filter: blur(22px) saturate(135%);
+    -webkit-backdrop-filter: blur(22px) saturate(135%);
 
-    transform:
-        translateY(18px);
+    opacity: 0;
+
+    transform: translateY(18px);
 
     animation:
         votingCardAppear
@@ -501,16 +500,42 @@ img {
         forwards;
 
     transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
+        transform 0.35s ease,
+        box-shadow 0.35s ease,
+        background 0.35s ease;
 }
 
 .voting-page-card:hover {
-    transform:
-        translateY(-7px);
+    transform: translateY(-7px);
+
+    background: rgba(255, 255, 255, 0.30);
 
     box-shadow:
-        0 22px 50px rgba(0, 0, 0, 0.12);
+        0 24px 55px rgba(70, 50, 100, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.voting-page-card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.30),
+            rgba(255, 255, 255, 0.06) 40%,
+            rgba(255, 255, 255, 0.12)
+        );
+
+    border-radius: inherit;
+
+    opacity: 0.7;
+
+    z-index: 1;
 }
 
 @keyframes votingCardAppear {
@@ -549,8 +574,7 @@ img {
     overflow:
         hidden;
 
-    background:
-        #eeeeee;
+    background: transparent !important
 }
 
 .mini-image {
@@ -563,8 +587,7 @@ img {
     overflow:
         hidden;
 
-    background:
-        #eeeeee;
+    background: transparent !important
 }
 
 .mini-image img {
@@ -602,11 +625,16 @@ img {
 ========================================================= */
 
 .card-content {
-    position:
-        relative;
+    position: relative;
 
-    padding:
-        25px;
+    padding: 25px;
+
+    background: rgba(255, 255, 255, 0.18);
+
+    border-top: 1px solid rgba(255, 255, 255, 0.28);
+
+    backdrop-filter: blur(14px) saturate(125%);
+    -webkit-backdrop-filter: blur(14px) saturate(125%);
 }
 
 .card-number {
@@ -669,23 +697,21 @@ img {
 }
 
 .card-options span:not(.versus) {
-    padding:
-        7px 11px;
+    padding: 7px 11px;
 
-    border-radius:
-        999px;
+    border-radius: 999px;
 
-    background:
-        #f0f0f2;
+    background: rgba(255, 255, 255, 0.32);
 
-    color:
-        #555555;
+    border: 1px solid rgba(255, 255, 255, 0.42);
 
-    font-size:
-        11px;
+    color: #555555;
 
-    font-weight:
-        700;
+    font-size: 11px;
+    font-weight: 700;
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .card-options .versus {
@@ -2860,247 +2886,527 @@ textarea:focus-visible {
 
 
 /* =========================================================
-   SMOOTH LIQUID GRADIENT BACKGROUND
-   Responsive for desktop, tablet and mobile
+   FROSTED GLASS VOTING CARDS
+   Put this at the VERY BOTTOM of styles.css
    ========================================================= */
 
-html {
-    background: #f5f3f9 !important;
+.voting-page-card {
+    position: relative !important;
+    overflow: hidden !important;
+
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(255, 255, 255, 0.38),
+            transparent 42%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(180, 155, 255, 0.18),
+            transparent 45%
+        ),
+        rgba(255, 255, 255, 0.38) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.75) !important;
+
+    box-shadow:
+        0 20px 50px rgba(70, 55, 100, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.25) !important;
+
+    backdrop-filter: blur(25px) saturate(145%) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(145%) !important;
+
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease,
+        background 0.35s ease !important;
 }
 
-body {
+
+/* Glass reflection */
+
+.voting-page-card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.38) 0%,
+            rgba(255, 255, 255, 0.10) 35%,
+            rgba(255, 255, 255, 0.02) 60%,
+            rgba(255, 255, 255, 0.18) 100%
+        );
+
+    border-radius: inherit;
+
+    z-index: 1;
+}
+
+
+/* Keep everything inside the card above the glass */
+
+.voting-page-card > * {
     position: relative;
-    min-height: 100vh;
-    margin: 0;
-    overflow-x: hidden;
-    background: #f5f3f9 !important;
+    z-index: 2;
 }
 
 
 /* =========================================================
-   MAIN LIQUID LAYER
+   FROSTED CONTENT AREA
+   ========================================================= */
+
+.voting-page-card .card-content {
+    position: relative;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.42),
+            rgba(255, 255, 255, 0.20)
+        ) !important;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.55);
+
+    backdrop-filter: blur(18px) saturate(135%);
+    -webkit-backdrop-filter: blur(18px) saturate(135%);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+
+/* =========================================================
+   GLASS OPTION PILLS
+   ========================================================= */
+
+.voting-page-card .card-options span:not(.versus) {
+    background: rgba(255, 255, 255, 0.35) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.55);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.55);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+.voting-page-card:hover {
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(255, 255, 255, 0.45),
+            transparent 42%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(180, 155, 255, 0.22),
+            transparent 45%
+        ),
+        rgba(255, 255, 255, 0.43) !important;
+
+    box-shadow:
+        0 26px 60px rgba(70, 55, 100, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+/* =========================================================
+   FINAL FROSTED GLASS
+   ========================================================= */
+
+.voting-page-card {
+    position: relative !important;
+    overflow: hidden !important;
+
+    background: rgba(255, 255, 255, 0.14) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.62) !important;
+
+    border-radius: 24px !important;
+
+    box-shadow:
+        0 20px 55px rgba(60, 45, 100, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.18) !important;
+
+    backdrop-filter: blur(28px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(160%) !important;
+
+    isolation: isolate;
+
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease !important;
+}
+
+
+/* Soft glass reflection */
+
+.voting-page-card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.28) 0%,
+            rgba(255, 255, 255, 0.06) 38%,
+            transparent 65%,
+            rgba(255, 255, 255, 0.12) 100%
+        );
+
+    border-radius: inherit;
+
+    z-index: 10;
+
+    pointer-events: none;
+}
+
+
+/* Keep card content above reflection */
+
+.voting-page-card > * {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* Image area */
+
+.voting-page-card .card-images {
+    background: rgba(255, 255, 255, 0.06) !important;
+}
+
+
+/* Individual image holders */
+
+.voting-page-card .mini-image {
+    background: rgba(255, 255, 255, 0.04) !important;
+}
+
+
+/* Content section */
+
+.voting-page-card .card-content {
+    background: rgba(255, 255, 255, 0.12) !important;
+
+    border-top:
+        1px solid rgba(255, 255, 255, 0.42) !important;
+
+    backdrop-filter: blur(20px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+}
+
+
+/* Small glass pills */
+
+.voting-page-card .card-options span:not(.versus) {
+    background: rgba(255, 255, 255, 0.18) !important;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.38) !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.45);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+
+/* Hover */
+
+.voting-page-card:hover {
+    transform: translateY(-7px) !important;
+
+    background: rgba(255, 255, 255, 0.18) !important;
+
+    box-shadow:
+        0 28px 65px rgba(60, 45, 100, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ /* =========================================================
+   CONTINUOUS LIQUID COLOR FLOW
+   ========================================================= */
+
+body {
+    position: relative;
+    overflow-x: hidden;
+    background: #f7f5fb;
+}
+
+
+/* =========================================================
+   LIQUID FLOW
    ========================================================= */
 
 body::before {
     content: "";
 
     position: fixed;
-    inset: -15%;
 
-    width: 130%;
-    height: 130%;
+    left: -100vw;
+    top: 55px;
+
+    width: 300vw;
+    height: calc(100vh - 55px);
 
     pointer-events: none;
+
     z-index: 0;
 
     background:
-
         radial-gradient(
-            ellipse 38% 32% at 8% 42%,
-            rgba(124, 58, 237, 0.28),
-            transparent 72%
+            ellipse 42% 28% at 5% 45%,
+            rgba(101, 54, 225, 0.42) 0%,
+            rgba(101, 54, 225, 0.25) 35%,
+            transparent 65%
         ),
 
         radial-gradient(
-            ellipse 42% 34% at 28% 20%,
-            rgba(214, 82, 220, 0.24),
-            transparent 72%
+            ellipse 44% 25% at 25% 55%,
+            rgba(174, 66, 226, 0.36) 0%,
+            rgba(174, 66, 226, 0.20) 38%,
+            transparent 65%
         ),
 
         radial-gradient(
-            ellipse 40% 36% at 48% 72%,
-            rgba(55, 125, 235, 0.25),
-            transparent 72%
+            ellipse 45% 27% at 45% 42%,
+            rgba(48, 111, 235, 0.34) 0%,
+            rgba(48, 111, 235, 0.18) 40%,
+            transparent 65%
         ),
 
         radial-gradient(
-            ellipse 42% 34% at 68% 28%,
-            rgba(40, 190, 165, 0.23),
-            transparent 72%
+            ellipse 42% 25% at 65% 58%,
+            rgba(24, 190, 165, 0.32) 0%,
+            rgba(24, 190, 165, 0.17) 40%,
+            transparent 65%
         ),
 
         radial-gradient(
-            ellipse 42% 36% at 88% 68%,
-            rgba(225, 90, 195, 0.25),
-            transparent 72%
+            ellipse 45% 28% at 85% 43%,
+            rgba(222, 79, 201, 0.32) 0%,
+            rgba(222, 79, 201, 0.17) 40%,
+            transparent 65%
         ),
 
         radial-gradient(
-            ellipse 36% 32% at 108% 30%,
-            rgba(100, 75, 230, 0.23),
-            transparent 72%
+            ellipse 40% 25% at 105% 58%,
+            rgba(104, 64, 228, 0.34) 0%,
+            rgba(104, 64, 228, 0.18) 40%,
+            transparent 65%
         );
 
-    opacity: 0.9;
+    filter: blur(32px);
 
-    filter: blur(48px);
-
-    transform:
-        translate3d(0, 0, 0)
-        scale(1.05);
+    opacity: 0.85;
 
     will-change: transform;
 
-    animation:
-        smoothLiquidMain
-        13s
-        cubic-bezier(0.45, 0.05, 0.55, 0.95)
-        infinite alternate;
+    animation: liquidSlide 4s linear infinite;
 }
 
 
 /* =========================================================
-   SECOND LIQUID LAYER
+   SECOND LIQUID STREAM
    ========================================================= */
 
 body::after {
     content: "";
 
     position: fixed;
-    inset: -15%;
 
-    width: 130%;
-    height: 130%;
+    left: -100vw;
+    top: 55px;
+
+    width: 300vw;
+    height: calc(100vh - 55px);
 
     pointer-events: none;
+
     z-index: 0;
 
     background:
-
         radial-gradient(
-            ellipse 42% 34% at 0% 70%,
-            rgba(80, 105, 235, 0.18),
-            transparent 72%
+            ellipse 46% 20% at 0% 35%,
+            rgba(72, 91, 235, 0.22),
+            transparent 60%
         ),
 
         radial-gradient(
-            ellipse 40% 32% at 20% 30%,
-            rgba(150, 70, 225, 0.17),
-            transparent 72%
+            ellipse 48% 22% at 22% 65%,
+            rgba(124, 58, 225, 0.24),
+            transparent 60%
         ),
 
         radial-gradient(
-            ellipse 44% 34% at 45% 82%,
-            rgba(225, 90, 205, 0.16),
-            transparent 72%
+            ellipse 46% 21% at 45% 32%,
+            rgba(218, 77, 204, 0.22),
+            transparent 60%
         ),
 
         radial-gradient(
-            ellipse 42% 34% at 70% 18%,
-            rgba(40, 185, 160, 0.18),
-            transparent 72%
+            ellipse 48% 23% at 68% 67%,
+            rgba(35, 178, 164, 0.22),
+            transparent 60%
         ),
 
         radial-gradient(
-            ellipse 42% 36% at 100% 62%,
-            rgba(90, 115, 235, 0.18),
-            transparent 72%
+            ellipse 46% 21% at 90% 35%,
+            rgba(70, 110, 235, 0.24),
+            transparent 60%
         );
 
-    opacity: 0.72;
+    filter: blur(40px);
 
-    filter: blur(58px);
-
-    transform:
-        translate3d(0, 0, 0)
-        scale(1.08);
+    opacity: 0.65;
 
     will-change: transform;
 
-    animation:
-        smoothLiquidSecond
-        17s
-        cubic-bezier(0.45, 0.05, 0.55, 0.95)
-        infinite alternate;
+    animation: liquidSlideReverse 5s linear infinite;
 }
 
 
 /* =========================================================
-   MAIN SMOOTH MOVEMENT
+   SMOOTH LEFT TO RIGHT FLOW
    ========================================================= */
 
-@keyframes smoothLiquidMain {
+@keyframes liquidSlide {
 
     0% {
         transform:
-            translate3d(-4%, -2%, 0)
-            scale(1.05);
+            translate3d(0, 0, 0)
+            scaleX(1.05)
+            scaleY(1);
     }
 
     25% {
         transform:
-            translate3d(3%, 2%, 0)
-            scale(1.10);
+            translate3d(20vw, 2vh, 0)
+            scaleX(1.08)
+            scaleY(1.02);
     }
 
     50% {
         transform:
-            translate3d(6%, -3%, 0)
-            scale(1.06);
+            translate3d(40vw, -2vh, 0)
+            scaleX(1.05)
+            scaleY(1.04);
     }
 
     75% {
         transform:
-            translate3d(-2%, 4%, 0)
-            scale(1.11);
+            translate3d(60vw, 2vh, 0)
+            scaleX(1.08)
+            scaleY(1.02);
     }
 
     100% {
         transform:
-            translate3d(-6%, 1%, 0)
-            scale(1.05);
+            translate3d(80vw, 0, 0)
+            scaleX(1.05)
+            scaleY(1);
     }
 }
 
 
 /* =========================================================
-   SECOND SMOOTH CURRENT
+   OPPOSITE SLOWER FLOW
    ========================================================= */
 
-@keyframes smoothLiquidSecond {
+@keyframes liquidSlideReverse {
 
     0% {
         transform:
-            translate3d(5%, 2%, 0)
-            scale(1.08);
+            translate3d(80vw, 0, 0)
+            scaleX(1.05);
     }
 
     25% {
         transform:
-            translate3d(-3%, -3%, 0)
-            scale(1.12);
+            translate3d(60vw, -2vh, 0)
+            scaleX(1.08);
     }
 
     50% {
         transform:
-            translate3d(-6%, 3%, 0)
-            scale(1.07);
+            translate3d(40vw, 2vh, 0)
+            scaleX(1.05);
     }
 
     75% {
         transform:
-            translate3d(2%, -4%, 0)
-            scale(1.13);
+            translate3d(20vw, -2vh, 0)
+            scaleX(1.08);
     }
 
     100% {
         transform:
-            translate3d(6%, 1%, 0)
-            scale(1.08);
+            translate3d(0, 0, 0)
+            scaleX(1.05);
     }
 }
 
 
 /* =========================================================
-   CONTENT ABOVE BACKGROUND
+   KEEP WEBSITE ABOVE LIQUID
    ========================================================= */
 
 .top-navigation,
-.container,
-main,
-section,
-.hero,
-.hero-heading {
+.container {
     position: relative;
     z-index: 2;
 }
@@ -3112,62 +3418,545 @@ section,
 
 @media (max-width: 600px) {
 
-    body {
-        min-height: 100dvh;
-    }
-
     body::before {
-        inset: -20%;
+        left: -150vw;
 
-        width: 140%;
-        height: 140%;
+        width: 400vw;
 
-        filter: blur(38px);
+        top: 55px;
 
-        opacity: 0.88;
+        height: calc(100vh - 55px);
 
-        animation-duration: 11s;
+        filter: blur(28px);
+
+        opacity: 0.78;
+
+        animation-duration: 3.5s;
     }
 
     body::after {
-        inset: -20%;
+        left: -150vw;
 
-        width: 140%;
-        height: 140%;
+        width: 400vw;
 
-        filter: blur(44px);
+        top: 55px;
 
-        opacity: 0.70;
+        height: calc(100vh - 55px);
 
-        animation-duration: 15s;
+        filter: blur(32px);
+
+        opacity: 0.60;
+
+        animation-duration: 4.5s;
     }
 }
 
 
 /* =========================================================
-   VERY SMALL PHONES
+   FINAL FIX: MAIN VOTING PAGE GLASS
+   This targets .image-option, NOT .voting-page-card.
    ========================================================= */
 
-@media (max-width: 380px) {
+#votingPage {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* The actual two large voting cards */
+
+#votingPage .image-option {
+    position: relative !important;
+    overflow: hidden !important;
+
+    background: rgba(255, 255, 255, 0.16) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.58) !important;
+
+    border-radius: 24px !important;
+
+    box-shadow:
+        0 22px 55px rgba(72, 55, 110, 0.13),
+        inset 0 1px 0 rgba(255, 255, 255, 0.75),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.12) !important;
+
+    backdrop-filter:
+        blur(28px)
+        saturate(155%) !important;
+
+    -webkit-backdrop-filter:
+        blur(28px)
+        saturate(155%) !important;
+
+    isolation: auto !important;
+
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease,
+        background 0.4s ease !important;
+}
+
+
+/* Glass shine */
+
+#votingPage .image-option::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    z-index: 20;
+
+    pointer-events: none;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.25) 0%,
+            rgba(255, 255, 255, 0.07) 34%,
+            transparent 62%,
+            rgba(255, 255, 255, 0.10) 100%
+        );
+}
+
+
+/* Keep all real card content above shine */
+
+#votingPage .image-option > * {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* Remove the solid gray box behind the paintings */
+
+#votingPage .image-wrapper {
+    background: rgba(255, 255, 255, 0.08) !important;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.28);
+}
+
+
+/* Remove the solid gray background from contain images */
+
+#votingPage .image-wrapper img {
+    background: transparent !important;
+}
+
+
+/* Radio area also becomes part of the glass */
+
+#votingPage .vote-option {
+    background: rgba(255, 255, 255, 0.10);
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.24);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+
+/* Card hover */
+
+#votingPage .image-option:hover {
+    transform: translateY(-6px) !important;
+
+    background: rgba(255, 255, 255, 0.21) !important;
+
+    box-shadow:
+        0 28px 68px rgba(72, 55, 110, 0.17),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
+}
+
+
+/* =========================================================
+   VOTING FORM GLASS
+   ========================================================= */
+
+#votingPage .voting-form {
+    position: relative !important;
+
+    background:
+        rgba(255, 255, 255, 0.16) !important;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.58) !important;
+
+    box-shadow:
+        0 22px 55px rgba(72, 55, 110, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+
+    backdrop-filter:
+        blur(28px)
+        saturate(150%) !important;
+
+    -webkit-backdrop-filter:
+        blur(28px)
+        saturate(150%) !important;
+}
+
+
+/* Glass inputs */
+
+#votingPage .form-group input,
+#votingPage .form-group textarea {
+    background:
+        rgba(255, 255, 255, 0.30) !important;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.50) !important;
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+
+/* =========================================================
+   MAKE THE LIQUID BACKGROUND SLOW AND VISIBLE
+   ========================================================= */
+
+body::before {
+    z-index: 0 !important;
+
+    filter: blur(38px) !important;
+
+    opacity: 0.92 !important;
+
+    animation:
+        liquidSlide
+        18s
+        ease-in-out
+        infinite
+        alternate !important;
+}
+
+
+body::after {
+    z-index: 0 !important;
+
+    filter: blur(46px) !important;
+
+    opacity: 0.72 !important;
+
+    animation:
+        liquidSlideReverse
+        23s
+        ease-in-out
+        infinite
+        alternate !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    #votingPage .image-option {
+        border-radius: 21px !important;
+
+        backdrop-filter:
+            blur(23px)
+            saturate(150%) !important;
+
+        -webkit-backdrop-filter:
+            blur(23px)
+            saturate(150%) !important;
+    }
+
+    #votingPage .image-wrapper img {
+        background: transparent !important;
+    }
+}
+
+
+@media (max-width: 600px) {
 
     body::before {
-        animation-duration: 10s;
+        filter: blur(32px) !important;
+        opacity: 0.86 !important;
+        animation-duration: 18s !important;
     }
 
     body::after {
-        animation-duration: 14s;
+        filter: blur(38px) !important;
+        opacity: 0.68 !important;
+        animation-duration: 23s !important;
+    }
+
+    #votingPage .image-option {
+        background:
+            rgba(255, 255, 255, 0.13) !important;
+    }
+
+    #votingPage .voting-form {
+        background:
+            rgba(255, 255, 255, 0.14) !important;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   PREMIUM MOVING GRADIENT
+   ========================================================= */
+
+.liquid-background {
+    position: fixed;
+    inset: 0;
+
+    overflow: hidden;
+
+    z-index: -1;
+
+    background: #f7f5fb;
+}
+
+
+/* Main color field */
+
+.liquid-background::before {
+    content: "";
+
+    position: absolute;
+
+    width: 160%;
+    height: 160%;
+
+    left: -30%;
+    top: -30%;
+
+    background:
+
+        radial-gradient(
+            ellipse 35% 30% at 15% 45%,
+            rgba(137, 73, 239, 0.75),
+            transparent 70%
+        ),
+
+        radial-gradient(
+            ellipse 34% 28% at 35% 20%,
+            rgba(235, 75, 194, 0.65),
+            transparent 70%
+        ),
+
+        radial-gradient(
+            ellipse 38% 32% at 55% 70%,
+            rgba(57, 143, 244, 0.65),
+            transparent 70%
+        ),
+
+        radial-gradient(
+            ellipse 32% 30% at 78% 25%,
+            rgba(39, 205, 185, 0.60),
+            transparent 70%
+        ),
+
+        radial-gradient(
+            ellipse 35% 30% at 90% 70%,
+            rgba(220, 72, 210, 0.62),
+            transparent 70%
+        );
+
+    filter: blur(70px);
+
+    transform:
+        translate3d(0, 0, 0)
+        scale(1.05);
+
+    will-change: transform;
+
+    animation:
+        gradientFlowOne
+        14s
+        ease-in-out
+        infinite
+        alternate;
+}
+
+
+/* Secondary color field */
+
+.liquid-background::after {
+    content: "";
+
+    position: absolute;
+
+    width: 170%;
+    height: 170%;
+
+    left: -35%;
+    top: -35%;
+
+    background:
+
+        radial-gradient(
+            ellipse 35% 28% at 5% 70%,
+            rgba(56, 116, 245, 0.55),
+            transparent 70%
+        ),
+
+        radial-gradient(
+            ellipse 38% 30% at 28% 50%,
+            rgba(188, 66, 231, 0.50),
+            transparent 70%
+        ),
+
+        radial-gradient(
+            ellipse 35% 28% at 52% 15%,
+            rgba(239, 91, 180, 0.48),
+            transparent 70%
+        ),
+
+        radial-gradient(
+            ellipse 38% 30% at 75% 65%,
+            rgba(43, 199, 178, 0.48),
+            transparent 70%
+        ),
+
+        radial-gradient(
+            ellipse 35% 28% at 100% 30%,
+            rgba(81, 105, 239, 0.52),
+            transparent 70%
+        );
+
+    filter: blur(90px);
+
+    opacity: 0.85;
+
+    transform:
+        translate3d(0, 0, 0)
+        scale(1.08);
+
+    will-change: transform;
+
+    animation:
+        gradientFlowTwo
+        19s
+        ease-in-out
+        infinite
+        alternate;
+}
+
+
+/* =========================================================
+   MAIN MOVEMENT
+   ========================================================= */
+
+@keyframes gradientFlowOne {
+
+    0% {
+        transform:
+            translate3d(-3%, -2%, 0)
+            scale(1.05);
+    }
+
+    20% {
+        transform:
+            translate3d(5%, 3%, 0)
+            scale(1.10);
+    }
+
+    40% {
+        transform:
+            translate3d(10%, -3%, 0)
+            scale(1.06);
+    }
+
+    60% {
+        transform:
+            translate3d(4%, 6%, 0)
+            scale(1.11);
+    }
+
+    80% {
+        transform:
+            translate3d(-5%, 2%, 0)
+            scale(1.07);
+    }
+
+    100% {
+        transform:
+            translate3d(-3%, -2%, 0)
+            scale(1.05);
     }
 }
 
 
 /* =========================================================
-   REDUCED MOTION
+   SECOND MOVEMENT
    ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
+@keyframes gradientFlowTwo {
 
-    body::before,
-    body::after {
-        animation: none;
+    0% {
+        transform:
+            translate3d(4%, 2%, 0)
+            scale(1.08);
+    }
+
+    25% {
+        transform:
+            translate3d(-4%, -3%, 0)
+            scale(1.12);
+    }
+
+    50% {
+        transform:
+            translate3d(-7%, 4%, 0)
+            scale(1.07);
+    }
+
+    75% {
+        transform:
+            translate3d(3%, -4%, 0)
+            scale(1.11);
+    }
+
+    100% {
+        transform:
+            translate3d(4%, 2%, 0)
+            scale(1.08);
     }
 }
