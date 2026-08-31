@@ -2853,181 +2853,171 @@ textarea:focus-visible {
 
 
  /* =========================================================
-   SOFT FLOWING PURPLE BACKGROUND
+   FINAL SOFT LIQUID BACKGROUND
    ========================================================= */
 
-html {
-    background: #f4f2f8 !important;
+html,
+body {
+    min-height: 100%;
 }
 
 body {
     position: relative;
-    min-height: 100vh;
     overflow-x: hidden;
 
     background:
         radial-gradient(
-            ellipse 80% 60% at 50% 20%,
-            rgba(116, 55, 225, 0.30),
-            transparent 68%
-        ),
-        radial-gradient(
-            ellipse 65% 55% at 8% 45%,
-            rgba(103, 58, 218, 0.24),
+            900px 600px at 15% 35%,
+            rgba(125, 78, 230, 0.20),
             transparent 70%
         ),
         radial-gradient(
-            ellipse 65% 55% at 92% 55%,
-            rgba(184, 71, 221, 0.20),
+            900px 600px at 85% 65%,
+            rgba(210, 105, 220, 0.18),
             transparent 70%
         ),
-        #f4f2f8;
+        #f7f5fb;
 }
 
 
-/* =========================================================
-   MAIN SOFT FLOW
-   ========================================================= */
+/* Main moving liquid */
 
 body::before {
     content: "";
 
     position: fixed;
 
-    width: 90vw;
-    height: 55vw;
+    z-index: 0;
+    pointer-events: none;
 
-    max-width: 1250px;
-    max-height: 720px;
+    width: 120vw;
+    height: 90vh;
 
-    left: 50%;
-    top: 32%;
-
-    transform: translate(-50%, -50%);
+    left: -10vw;
+    top: 80px;
 
     background:
         radial-gradient(
-            ellipse at 25% 55%,
-            rgba(91, 36, 210, 0.50),
-            transparent 58%
+            ellipse 45% 35% at 18% 48%,
+            rgba(103, 62, 225, 0.30),
+            transparent 72%
         ),
         radial-gradient(
-            ellipse at 75% 45%,
-            rgba(163, 48, 230, 0.44),
-            transparent 58%
+            ellipse 48% 38% at 82% 52%,
+            rgba(202, 86, 220, 0.26),
+            transparent 72%
+        ),
+        radial-gradient(
+            ellipse 42% 30% at 52% 25%,
+            rgba(154, 77, 230, 0.18),
+            transparent 70%
         );
 
-    filter: blur(85px);
+    filter: blur(45px);
 
-    opacity: 0.78;
+    opacity: 0.85;
 
-    pointer-events: none;
-
-    z-index: 0;
-
-    animation:
-        softPurpleFlow 18s ease-in-out infinite alternate;
+    animation: liquidFlow 14s ease-in-out infinite alternate;
 }
 
 
-/* =========================================================
-   SECOND SOFT FLOW
-   ========================================================= */
+/* Secondary movement */
 
 body::after {
     content: "";
 
     position: fixed;
 
-    width: 120vw;
-    height: 90vh;
+    z-index: 0;
+    pointer-events: none;
 
-    left: 50%;
-    top: 55%;
+    width: 110vw;
+    height: 85vh;
 
-    transform: translate(-50%, -50%);
+    left: -5vw;
+    top: 100px;
 
     background:
         radial-gradient(
-            ellipse at 20% 70%,
-            rgba(118, 63, 220, 0.20),
-            transparent 50%
+            ellipse 38% 30% at 75% 25%,
+            rgba(116, 72, 235, 0.18),
+            transparent 70%
         ),
         radial-gradient(
-            ellipse at 80% 30%,
-            rgba(207, 75, 220, 0.16),
-            transparent 52%
-        ),
-        radial-gradient(
-            ellipse at 50% 50%,
-            rgba(255, 255, 255, 0.48),
-            transparent 55%
+            ellipse 40% 32% at 25% 75%,
+            rgba(226, 105, 216, 0.15),
+            transparent 70%
         );
 
-    filter: blur(70px);
+    filter: blur(55px);
 
-    opacity: 0.72;
+    opacity: 0.75;
 
-    pointer-events: none;
-
-    z-index: 0;
-
-    animation:
-        softAtmosphereFlow 24s ease-in-out infinite alternate;
+    animation: liquidFlowReverse 18s ease-in-out infinite alternate;
 }
 
 
 /* =========================================================
-   GENTLE FLOW
+   LIQUID MOTION
    ========================================================= */
 
-@keyframes softPurpleFlow {
+@keyframes liquidFlow {
 
     0% {
         transform:
-            translate(-53%, -48%)
+            translate3d(-4%, 0, 0)
             scale(1);
+    }
+
+    25% {
+        transform:
+            translate3d(2%, 3%, 0)
+            scale(1.04);
     }
 
     50% {
         transform:
-            translate(-47%, -52%)
+            translate3d(5%, -2%, 0)
+            scale(1.07);
+    }
+
+    75% {
+        transform:
+            translate3d(-2%, 4%, 0)
+            scale(1.04);
+    }
+
+    100% {
+        transform:
+            translate3d(-5%, -2%, 0)
+            scale(1);
+    }
+}
+
+
+@keyframes liquidFlowReverse {
+
+    0% {
+        transform:
+            translate3d(4%, 2%, 0)
+            scale(1.03);
+    }
+
+    50% {
+        transform:
+            translate3d(-4%, -3%, 0)
             scale(1.08);
     }
 
     100% {
         transform:
-            translate(-51%, -46%)
-            scale(1.03);
-    }
-}
-
-
-@keyframes softAtmosphereFlow {
-
-    0% {
-        transform:
-            translate(-48%, -52%)
-            scale(1);
-    }
-
-    50% {
-        transform:
-            translate(-52%, -47%)
-            scale(1.06);
-    }
-
-    100% {
-        transform:
-            translate(-49%, -50%)
+            translate3d(3%, 4%, 0)
             scale(1.02);
     }
 }
 
 
-/* =========================================================
-   KEEP WEBSITE ABOVE BACKGROUND
-   ========================================================= */
+/* Keep actual website above liquid */
 
 .top-navigation,
 .container {
@@ -3043,25 +3033,30 @@ body::after {
 @media (max-width: 600px) {
 
     body::before {
-        width: 170vw;
-        height: 120vw;
+        width: 180vw;
+        height: 100vh;
 
-        top: 25%;
+        left: -40vw;
+        top: 70px;
 
-        filter: blur(70px);
+        filter: blur(38px);
 
-        opacity: 0.72;
+        opacity: 0.78;
+
+        animation-duration: 12s;
     }
 
     body::after {
-        width: 180vw;
-        height: 120vh;
+        width: 170vw;
+        height: 100vh;
 
-        top: 55%;
+        left: -35vw;
+        top: 80px;
 
-        filter: blur(60px);
+        filter: blur(45px);
 
-        opacity: 0.65;
+        opacity: 0.68;
+
+        animation-duration: 15s;
     }
-
-}
+}   
