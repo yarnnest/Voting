@@ -2844,3 +2844,60 @@ textarea:focus-visible {
     height: 27px;
     display: block;
 }
+
+
+
+
+/* =========================================================
+   SMOKY BACKGROUND
+========================================================= */
+
+body {
+    position: relative;
+    min-height: 100vh;
+    background: #f5f5f7;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: -20%;
+    z-index: -2;
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(124, 58, 237, 0.12),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 85% 25%,
+            rgba(236, 72, 153, 0.10),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 50% 85%,
+            rgba(249, 115, 22, 0.08),
+            transparent 34%
+        );
+
+    filter: blur(55px);
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(255, 255, 255, 0.72),
+            rgba(245, 245, 247, 0.25) 55%,
+            rgba(238, 238, 243, 0.45)
+        );
+}
