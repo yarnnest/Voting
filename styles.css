@@ -2860,68 +2860,73 @@ textarea:focus-visible {
 
 
 /* =========================================================
-   SMOOTH CONTINUOUS LIQUID BACKGROUND
+   FINAL MOVING LIQUID GRADIENT
    ========================================================= */
+
+html {
+    min-height: 100%;
+    background: #f5f2fa !important;
+}
 
 body {
     position: relative;
+    min-height: 100vh;
+    margin: 0;
     overflow-x: hidden;
-    background: #f2eef9;
+
+    background: #f5f2fa !important;
 }
 
 
 /* =========================================================
-   CONTINUOUS LIQUID COLOUR FIELD
+   MAIN CONTINUOUS LIQUID
    ========================================================= */
 
 body::before {
     content: "";
 
     position: fixed;
-    z-index: 0;
 
-    left: -50%;
-    top: 55px;
+    left: -80vw;
+    top: 0;
 
-    width: 200%;
-    height: calc(100vh - 55px);
+    width: 260vw;
+    height: 100vh;
 
     pointer-events: none;
 
+    z-index: 0;
+
     background:
         linear-gradient(
-            115deg,
+            110deg,
 
-            #24104f 0%,
+            rgba(88, 45, 205, 0.42) 0%,
 
-            #321477 8%,
+            rgba(112, 55, 220, 0.45) 10%,
 
-            #4720a0 17%,
+            rgba(166, 65, 222, 0.40) 20%,
 
-            #5530c2 25%,
+            rgba(105, 70, 220, 0.38) 30%,
 
-            #2458c8 34%,
+            rgba(55, 105, 225, 0.38) 40%,
 
-            #087fb8 42%,
+            rgba(22, 145, 210, 0.36) 50%,
 
-            #079f91 50%,
+            rgba(25, 180, 155, 0.34) 60%,
 
-            #31a94f 57%,
+            rgba(52, 175, 105, 0.32) 69%,
 
-            #78ad28 64%,
+            rgba(135, 155, 55, 0.30) 77%,
 
-            #d09b19 70%,
+            rgba(205, 75, 180, 0.35) 87%,
 
-            #e75b35 76%,
+            rgba(100, 45, 210, 0.42) 96%,
 
-            #d52f91 83%,
-
-            #7529c7 91%,
-
-            #24104f 100%
+            rgba(88, 45, 205, 0.42) 100%
         );
 
-    background-size: 180% 180%;
+    background-size: 220% 160%;
 
     background-position: 0% 50%;
 
@@ -2929,213 +2934,311 @@ body::before {
 
     transform:
         translate3d(0, 0, 0)
-        scale(1.15);
+        scale(1.08);
 
-    will-change: background-position, transform;
+    will-change: transform, background-position;
 
     animation:
-        liquidColourFlow 7s linear infinite;
+        continuousLiquid
+        7s
+        linear
+        infinite;
 }
 
 
 /* =========================================================
-   SECOND SOFT WATER CURRENT
+   SECOND LIQUID CURRENT
    ========================================================= */
 
 body::after {
     content: "";
 
     position: fixed;
-    z-index: 0;
 
-    left: -50%;
-    top: 55px;
+    left: -80vw;
+    top: 0;
 
-    width: 200%;
-    height: calc(100vh - 55px);
+    width: 260vw;
+    height: 100vh;
 
     pointer-events: none;
+
+    z-index: 0;
 
     background:
         linear-gradient(
             70deg,
 
-            transparent 0%,
+            rgba(60, 70, 210, 0.22) 0%,
 
-            rgba(38, 81, 205, 0.32) 18%,
+            rgba(80, 55, 220, 0.25) 12%,
 
-            rgba(0, 160, 190, 0.28) 31%,
+            rgba(160, 60, 220, 0.24) 24%,
 
-            rgba(34, 175, 92, 0.25) 43%,
+            rgba(50, 115, 220, 0.23) 38%,
 
-            rgba(235, 180, 25, 0.24) 56%,
+            rgba(20, 170, 175, 0.25) 52%,
 
-            rgba(220, 52, 116, 0.30) 69%,
+            rgba(45, 175, 105, 0.22) 64%,
 
-            rgba(104, 45, 210, 0.32) 82%,
+            rgba(220, 80, 185, 0.25) 78%,
 
-            transparent 100%
+            rgba(90, 55, 220, 0.24) 90%,
+
+            rgba(60, 70, 210, 0.22) 100%
         );
 
-    background-size: 160% 160%;
+    background-size: 210% 170%;
 
     background-position: 100% 50%;
 
-    opacity: 0.72;
+    opacity: 0.68;
 
     transform:
         translate3d(0, 0, 0)
         scale(1.12);
 
-    will-change: background-position;
+    will-change: transform, background-position;
 
     animation:
-        liquidSecondFlow 9s linear infinite;
+        continuousLiquidReverse
+        9s
+        linear
+        infinite;
 }
 
 
 /* =========================================================
-   MAIN CONTINUOUS MOVEMENT
+   ACTUAL LIQUID MOVEMENT
    ========================================================= */
 
-@keyframes liquidColourFlow {
+@keyframes continuousLiquid {
 
     0% {
         background-position: 0% 48%;
+
         transform:
             translate3d(0, 0, 0)
-            scale(1.15);
+            scale(1.08);
+    }
+
+    12.5% {
+        background-position: 12.5% 52%;
+
+        transform:
+            translate3d(-4vw, 1vh, 0)
+            scale(1.10);
     }
 
     25% {
-        background-position: 25% 52%;
+        background-position: 25% 48%;
+
         transform:
-            translate3d(-1.5%, 1%, 0)
-            scale(1.17);
+            translate3d(-8vw, -1vh, 0)
+            scale(1.12);
+    }
+
+    37.5% {
+        background-position: 37.5% 52%;
+
+        transform:
+            translate3d(-12vw, 1vh, 0)
+            scale(1.10);
     }
 
     50% {
         background-position: 50% 48%;
+
         transform:
-            translate3d(-3%, -1%, 0)
-            scale(1.15);
+            translate3d(-16vw, -1vh, 0)
+            scale(1.12);
+    }
+
+    62.5% {
+        background-position: 62.5% 52%;
+
+        transform:
+            translate3d(-20vw, 1vh, 0)
+            scale(1.10);
     }
 
     75% {
-        background-position: 75% 52%;
+        background-position: 75% 48%;
+
         transform:
-            translate3d(-1.5%, 1%, 0)
-            scale(1.17);
+            translate3d(-24vw, -1vh, 0)
+            scale(1.12);
+    }
+
+    87.5% {
+        background-position: 87.5% 52%;
+
+        transform:
+            translate3d(-28vw, 1vh, 0)
+            scale(1.10);
     }
 
     100% {
         background-position: 100% 48%;
+
         transform:
-            translate3d(0, 0, 0)
-            scale(1.15);
+            translate3d(-32vw, 0, 0)
+            scale(1.08);
     }
 }
 
 
 /* =========================================================
-   SECOND CURRENT
+   SECOND CURRENT MOVES OPPOSITE
    ========================================================= */
 
-@keyframes liquidSecondFlow {
+@keyframes continuousLiquidReverse {
 
     0% {
-        background-position: 100% 50%;
+        background-position: 100% 52%;
+
+        transform:
+            translate3d(0, 0, 0)
+            scale(1.12);
+    }
+
+    12.5% {
+        background-position: 87.5% 48%;
+
+        transform:
+            translate3d(4vw, -1vh, 0)
+            scale(1.10);
     }
 
     25% {
-        background-position: 75% 47%;
+        background-position: 75% 52%;
+
+        transform:
+            translate3d(8vw, 1vh, 0)
+            scale(1.13);
+    }
+
+    37.5% {
+        background-position: 62.5% 48%;
+
+        transform:
+            translate3d(12vw, -1vh, 0)
+            scale(1.10);
     }
 
     50% {
-        background-position: 50% 53%;
+        background-position: 50% 52%;
+
+        transform:
+            translate3d(16vw, 1vh, 0)
+            scale(1.13);
+    }
+
+    62.5% {
+        background-position: 37.5% 48%;
+
+        transform:
+            translate3d(20vw, -1vh, 0)
+            scale(1.10);
     }
 
     75% {
-        background-position: 25% 47%;
+        background-position: 25% 52%;
+
+        transform:
+            translate3d(24vw, 1vh, 0)
+            scale(1.13);
+    }
+
+    87.5% {
+        background-position: 12.5% 48%;
+
+        transform:
+            translate3d(28vw, -1vh, 0)
+            scale(1.10);
     }
 
     100% {
-        background-position: 0% 50%;
+        background-position: 0% 52%;
+
+        transform:
+            translate3d(32vw, 0, 0)
+            scale(1.12);
     }
 }
 
 
 /* =========================================================
-   KEEP PAGE CONTENT ABOVE LIQUID
+   WEBSITE CONTENT ABOVE BACKGROUND
    ========================================================= */
 
-.top-navigation,
-.hero,
-.hero-heading,
-.container,
-main,
-section,
-.grid {
+.top-navigation {
+    position: relative;
+    z-index: 5;
+}
+
+.container {
     position: relative;
     z-index: 2;
 }
 
 
 /* =========================================================
-   DESKTOP
-   ========================================================= */
-
-@media (min-width: 601px) {
-
-    body::before {
-        opacity: 0.88;
-        background-size: 180% 180%;
-        animation-duration: 7s;
-    }
-
-    body::after {
-        opacity: 0.70;
-        background-size: 160% 160%;
-        animation-duration: 9s;
-    }
-}
-
-
-/* =========================================================
-   PHONE
+   MOBILE OPTIMIZATION
    ========================================================= */
 
 @media (max-width: 600px) {
 
     body::before {
-        left: -70%;
-        width: 240%;
 
-        top: 55px;
-        height: calc(100vh - 55px);
+        left: -130vw;
 
-        background-size: 220% 180%;
+        width: 360vw;
+        height: 100dvh;
+
+        top: 0;
+
+        background-size: 240% 180%;
 
         opacity: 0.84;
-
-        transform: scale(1.2);
 
         animation-duration: 6s;
     }
 
+
     body::after {
-        left: -70%;
-        width: 240%;
 
-        top: 55px;
-        height: calc(100vh - 55px);
+        left: -130vw;
 
-        background-size: 200% 180%;
+        width: 360vw;
+        height: 100dvh;
 
-        opacity: 0.66;
+        top: 0;
 
-        transform: scale(1.18);
+        background-size: 230% 180%;
+
+        opacity: 0.64;
 
         animation-duration: 8s;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    body::before {
+        left: -145vw;
+        width: 390vw;
+        animation-duration: 5.5s;
+    }
+
+    body::after {
+        left: -145vw;
+        width: 390vw;
+        animation-duration: 7.5s;
     }
 }
