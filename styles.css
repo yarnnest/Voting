@@ -2852,50 +2852,216 @@ textarea:focus-visible {
 
 
 
-
-
-/* =========================================================
-   LIQUID WATER BACKGROUND
+ /* =========================================================
+   SOFT FLOWING PURPLE BACKGROUND
    ========================================================= */
 
 html {
-    background: #f7f5ff !important;
+    background: #f4f2f8 !important;
 }
 
 body {
-    background: #f7f5ff !important;
     position: relative;
     min-height: 100vh;
     overflow-x: hidden;
+
+    background:
+        radial-gradient(
+            ellipse 80% 60% at 50% 20%,
+            rgba(116, 55, 225, 0.30),
+            transparent 68%
+        ),
+        radial-gradient(
+            ellipse 65% 55% at 8% 45%,
+            rgba(103, 58, 218, 0.24),
+            transparent 70%
+        ),
+        radial-gradient(
+            ellipse 65% 55% at 92% 55%,
+            rgba(184, 71, 221, 0.20),
+            transparent 70%
+        ),
+        #f4f2f8;
 }
 
 
-/* Canvas */
+/* =========================================================
+   MAIN SOFT FLOW
+   ========================================================= */
 
-#liquid-bg {
+body::before {
+    content: "";
+
     position: fixed;
 
-    left: 0;
-    top: 0;
+    width: 90vw;
+    height: 55vw;
 
-    width: 100vw;
-    height: 100vh;
+    max-width: 1250px;
+    max-height: 720px;
 
-    display: block;
+    left: 50%;
+    top: 32%;
 
-    margin: 0;
-    padding: 0;
+    transform: translate(-50%, -50%);
+
+    background:
+        radial-gradient(
+            ellipse at 25% 55%,
+            rgba(91, 36, 210, 0.50),
+            transparent 58%
+        ),
+        radial-gradient(
+            ellipse at 75% 45%,
+            rgba(163, 48, 230, 0.44),
+            transparent 58%
+        );
+
+    filter: blur(85px);
+
+    opacity: 0.78;
 
     pointer-events: none;
 
     z-index: 0;
+
+    animation:
+        softPurpleFlow 18s ease-in-out infinite alternate;
 }
 
 
-/* Website stays above the water */
+/* =========================================================
+   SECOND SOFT FLOW
+   ========================================================= */
+
+body::after {
+    content: "";
+
+    position: fixed;
+
+    width: 120vw;
+    height: 90vh;
+
+    left: 50%;
+    top: 55%;
+
+    transform: translate(-50%, -50%);
+
+    background:
+        radial-gradient(
+            ellipse at 20% 70%,
+            rgba(118, 63, 220, 0.20),
+            transparent 50%
+        ),
+        radial-gradient(
+            ellipse at 80% 30%,
+            rgba(207, 75, 220, 0.16),
+            transparent 52%
+        ),
+        radial-gradient(
+            ellipse at 50% 50%,
+            rgba(255, 255, 255, 0.48),
+            transparent 55%
+        );
+
+    filter: blur(70px);
+
+    opacity: 0.72;
+
+    pointer-events: none;
+
+    z-index: 0;
+
+    animation:
+        softAtmosphereFlow 24s ease-in-out infinite alternate;
+}
+
+
+/* =========================================================
+   GENTLE FLOW
+   ========================================================= */
+
+@keyframes softPurpleFlow {
+
+    0% {
+        transform:
+            translate(-53%, -48%)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translate(-47%, -52%)
+            scale(1.08);
+    }
+
+    100% {
+        transform:
+            translate(-51%, -46%)
+            scale(1.03);
+    }
+}
+
+
+@keyframes softAtmosphereFlow {
+
+    0% {
+        transform:
+            translate(-48%, -52%)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translate(-52%, -47%)
+            scale(1.06);
+    }
+
+    100% {
+        transform:
+            translate(-49%, -50%)
+            scale(1.02);
+    }
+}
+
+
+/* =========================================================
+   KEEP WEBSITE ABOVE BACKGROUND
+   ========================================================= */
 
 .top-navigation,
 .container {
     position: relative;
     z-index: 2;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    body::before {
+        width: 170vw;
+        height: 120vw;
+
+        top: 25%;
+
+        filter: blur(70px);
+
+        opacity: 0.72;
+    }
+
+    body::after {
+        width: 180vw;
+        height: 120vh;
+
+        top: 55%;
+
+        filter: blur(60px);
+
+        opacity: 0.65;
+    }
+
 }
