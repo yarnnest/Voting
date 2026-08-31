@@ -2847,57 +2847,100 @@ textarea:focus-visible {
 
 
 
-
 /* =========================================================
-   SMOKY BACKGROUND
+   SMOKY PURPLE BACKGROUND
 ========================================================= */
 
 body {
     position: relative;
     min-height: 100vh;
-    background: #f5f5f7;
     overflow-x: hidden;
+
+    background:
+        radial-gradient(
+            ellipse 75% 55% at 50% 25%,
+            rgba(108, 45, 220, 0.28),
+            transparent 65%
+        ),
+        radial-gradient(
+            ellipse 55% 45% at 15% 45%,
+            rgba(126, 55, 230, 0.22),
+            transparent 70%
+        ),
+        radial-gradient(
+            ellipse 55% 45% at 88% 55%,
+            rgba(181, 55, 220, 0.18),
+            transparent 70%
+        ),
+        #f3f3f6;
 }
+
+
+/* Large blurred smoky light */
 
 body::before {
     content: "";
     position: fixed;
-    inset: -20%;
-    z-index: -2;
-    pointer-events: none;
+
+    width: 75vw;
+    height: 45vw;
+
+    max-width: 1100px;
+    max-height: 650px;
+
+    left: 50%;
+    top: 28%;
+
+    transform: translate(-50%, -50%);
 
     background:
         radial-gradient(
-            circle at 15% 20%,
-            rgba(124, 58, 237, 0.12),
-            transparent 32%
+            ellipse at 30% 55%,
+            rgba(91, 36, 210, 0.55),
+            transparent 55%
         ),
         radial-gradient(
-            circle at 85% 25%,
-            rgba(236, 72, 153, 0.10),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 50% 85%,
-            rgba(249, 115, 22, 0.08),
-            transparent 34%
+            ellipse at 70% 45%,
+            rgba(158, 48, 230, 0.48),
+            transparent 55%
         );
 
-    filter: blur(55px);
+    filter: blur(75px);
+
+    opacity: 0.8;
+
+    pointer-events: none;
+    z-index: -2;
 }
+
+
+/* Soft atmospheric haze */
 
 body::after {
     content: "";
+
     position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
+    inset: -15%;
 
     background:
         radial-gradient(
-            ellipse at center,
-            rgba(255, 255, 255, 0.72),
-            rgba(245, 245, 247, 0.25) 55%,
-            rgba(238, 238, 243, 0.45)
+            ellipse at 50% 20%,
+            rgba(255, 255, 255, 0.65),
+            transparent 45%
+        ),
+        radial-gradient(
+            ellipse at 20% 75%,
+            rgba(112, 55, 220, 0.18),
+            transparent 45%
+        ),
+        radial-gradient(
+            ellipse at 85% 75%,
+            rgba(194, 70, 220, 0.15),
+            transparent 45%
         );
+
+    filter: blur(65px);
+
+    pointer-events: none;
+    z-index: -1;
 }
