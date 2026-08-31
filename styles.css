@@ -2860,281 +2860,282 @@ textarea:focus-visible {
 
 
 /* =========================================================
-   SMOOTH FAST LIQUID GRADIENT
+   SMOOTH CONTINUOUS LIQUID BACKGROUND
    ========================================================= */
 
 body {
     position: relative;
     overflow-x: hidden;
-
-    background: #f4f1fa;
+    background: #f2eef9;
 }
 
 
 /* =========================================================
-   MAIN LIQUID STREAM
+   CONTINUOUS LIQUID COLOUR FIELD
    ========================================================= */
 
 body::before {
     content: "";
 
     position: fixed;
+    z-index: 0;
 
-    left: -120vw;
+    left: -50%;
     top: 55px;
 
-    width: 340vw;
+    width: 200%;
     height: calc(100vh - 55px);
 
     pointer-events: none;
-    z-index: 0;
 
     background:
-        radial-gradient(
-            ellipse 46% 34% at 4% 50%,
-            rgba(88, 43, 210, 0.52) 0%,
-            rgba(88, 43, 210, 0.38) 28%,
-            rgba(88, 43, 210, 0.12) 58%,
-            transparent 78%
-        ),
+        linear-gradient(
+            115deg,
 
-        radial-gradient(
-            ellipse 48% 32% at 24% 35%,
-            rgba(154, 47, 215, 0.46) 0%,
-            rgba(154, 47, 215, 0.32) 30%,
-            rgba(154, 47, 215, 0.10) 60%,
-            transparent 80%
-        ),
+            #24104f 0%,
 
-        radial-gradient(
-            ellipse 48% 34% at 45% 65%,
-            rgba(32, 92, 220, 0.44) 0%,
-            rgba(32, 92, 220, 0.30) 30%,
-            rgba(32, 92, 220, 0.10) 60%,
-            transparent 80%
-        ),
+            #321477 8%,
 
-        radial-gradient(
-            ellipse 46% 32% at 66% 35%,
-            rgba(20, 170, 135, 0.42) 0%,
-            rgba(20, 170, 135, 0.28) 30%,
-            rgba(20, 170, 135, 0.09) 60%,
-            transparent 80%
-        ),
+            #4720a0 17%,
 
-        radial-gradient(
-            ellipse 48% 34% at 87% 62%,
-            rgba(207, 55, 185, 0.44) 0%,
-            rgba(207, 55, 185, 0.30) 30%,
-            rgba(207, 55, 185, 0.09) 60%,
-            transparent 80%
-        ),
+            #5530c2 25%,
 
-        radial-gradient(
-            ellipse 45% 32% at 108% 35%,
-            rgba(55, 75, 215, 0.44) 0%,
-            rgba(55, 75, 215, 0.28) 32%,
-            rgba(55, 75, 215, 0.08) 62%,
-            transparent 80%
+            #2458c8 34%,
+
+            #087fb8 42%,
+
+            #079f91 50%,
+
+            #31a94f 57%,
+
+            #78ad28 64%,
+
+            #d09b19 70%,
+
+            #e75b35 76%,
+
+            #d52f91 83%,
+
+            #7529c7 91%,
+
+            #24104f 100%
         );
 
-    filter: blur(34px);
+    background-size: 180% 180%;
 
-    opacity: 0.96;
+    background-position: 0% 50%;
 
-    will-change: transform;
+    opacity: 0.88;
 
-    transform: translate3d(0, 0, 0);
+    transform:
+        translate3d(0, 0, 0)
+        scale(1.15);
 
-    animation: smoothLiquidFlow 4s linear infinite;
+    will-change: background-position, transform;
+
+    animation:
+        liquidColourFlow 7s linear infinite;
 }
 
 
 /* =========================================================
-   SECOND LIQUID STREAM
+   SECOND SOFT WATER CURRENT
    ========================================================= */
 
 body::after {
     content: "";
 
     position: fixed;
+    z-index: 0;
 
-    left: -120vw;
+    left: -50%;
     top: 55px;
 
-    width: 340vw;
+    width: 200%;
     height: calc(100vh - 55px);
 
     pointer-events: none;
-    z-index: 0;
 
     background:
-        radial-gradient(
-            ellipse 50% 27% at 5% 30%,
-            rgba(48, 80, 215, 0.34),
-            transparent 76%
-        ),
+        linear-gradient(
+            70deg,
 
-        radial-gradient(
-            ellipse 48% 28% at 27% 70%,
-            rgba(103, 42, 205, 0.36),
-            transparent 76%
-        ),
+            transparent 0%,
 
-        radial-gradient(
-            ellipse 50% 27% at 48% 30%,
-            rgba(207, 55, 185, 0.32),
-            transparent 76%
-        ),
+            rgba(38, 81, 205, 0.32) 18%,
 
-        radial-gradient(
-            ellipse 48% 29% at 69% 70%,
-            rgba(22, 165, 140, 0.34),
-            transparent 76%
-        ),
+            rgba(0, 160, 190, 0.28) 31%,
 
-        radial-gradient(
-            ellipse 50% 27% at 91% 30%,
-            rgba(63, 88, 220, 0.34),
-            transparent 76%
+            rgba(34, 175, 92, 0.25) 43%,
+
+            rgba(235, 180, 25, 0.24) 56%,
+
+            rgba(220, 52, 116, 0.30) 69%,
+
+            rgba(104, 45, 210, 0.32) 82%,
+
+            transparent 100%
         );
 
-    filter: blur(42px);
+    background-size: 160% 160%;
 
-    opacity: 0.78;
+    background-position: 100% 50%;
 
-    will-change: transform;
+    opacity: 0.72;
 
-    transform: translate3d(0, 0, 0);
+    transform:
+        translate3d(0, 0, 0)
+        scale(1.12);
 
-    animation: smoothLiquidReverse 5s linear infinite;
+    will-change: background-position;
+
+    animation:
+        liquidSecondFlow 9s linear infinite;
 }
 
 
 /* =========================================================
-   CONTINUOUS LIQUID MOVEMENT
+   MAIN CONTINUOUS MOVEMENT
    ========================================================= */
 
-@keyframes smoothLiquidFlow {
+@keyframes liquidColourFlow {
 
     0% {
+        background-position: 0% 48%;
         transform:
             translate3d(0, 0, 0)
-            scale(1.05, 1);
+            scale(1.15);
     }
 
-    20% {
+    25% {
+        background-position: 25% 52%;
         transform:
-            translate3d(-16vw, 2vh, 0)
-            scale(1.08, 1.02);
+            translate3d(-1.5%, 1%, 0)
+            scale(1.17);
     }
 
-    40% {
+    50% {
+        background-position: 50% 48%;
         transform:
-            translate3d(-32vw, -2vh, 0)
-            scale(1.10, 1.04);
+            translate3d(-3%, -1%, 0)
+            scale(1.15);
     }
 
-    60% {
+    75% {
+        background-position: 75% 52%;
         transform:
-            translate3d(-48vw, 2vh, 0)
-            scale(1.08, 1.02);
-    }
-
-    80% {
-        transform:
-            translate3d(-64vw, -1vh, 0)
-            scale(1.10, 1.03);
+            translate3d(-1.5%, 1%, 0)
+            scale(1.17);
     }
 
     100% {
-        transform:
-            translate3d(-80vw, 0, 0)
-            scale(1.05, 1);
-    }
-}
-
-
-@keyframes smoothLiquidReverse {
-
-    0% {
-        transform:
-            translate3d(-80vw, 1vh, 0)
-            scale(1.06, 1);
-    }
-
-    20% {
-        transform:
-            translate3d(-64vw, -2vh, 0)
-            scale(1.09, 1.03);
-    }
-
-    40% {
-        transform:
-            translate3d(-48vw, 2vh, 0)
-            scale(1.06, 1.04);
-    }
-
-    60% {
-        transform:
-            translate3d(-32vw, -2vh, 0)
-            scale(1.09, 1.02);
-    }
-
-    80% {
-        transform:
-            translate3d(-16vw, 1vh, 0)
-            scale(1.07, 1.03);
-    }
-
-    100% {
+        background-position: 100% 48%;
         transform:
             translate3d(0, 0, 0)
-            scale(1.06, 1);
+            scale(1.15);
     }
 }
 
 
 /* =========================================================
-   KEEP CONTENT ABOVE BACKGROUND
+   SECOND CURRENT
+   ========================================================= */
+
+@keyframes liquidSecondFlow {
+
+    0% {
+        background-position: 100% 50%;
+    }
+
+    25% {
+        background-position: 75% 47%;
+    }
+
+    50% {
+        background-position: 50% 53%;
+    }
+
+    75% {
+        background-position: 25% 47%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+/* =========================================================
+   KEEP PAGE CONTENT ABOVE LIQUID
    ========================================================= */
 
 .top-navigation,
-.container {
+.hero,
+.hero-heading,
+.container,
+main,
+section,
+.grid {
     position: relative;
     z-index: 2;
 }
 
 
 /* =========================================================
-   MOBILE
+   DESKTOP
+   ========================================================= */
+
+@media (min-width: 601px) {
+
+    body::before {
+        opacity: 0.88;
+        background-size: 180% 180%;
+        animation-duration: 7s;
+    }
+
+    body::after {
+        opacity: 0.70;
+        background-size: 160% 160%;
+        animation-duration: 9s;
+    }
+}
+
+
+/* =========================================================
+   PHONE
    ========================================================= */
 
 @media (max-width: 600px) {
 
     body::before {
-        left: -160vw;
+        left: -70%;
+        width: 240%;
 
-        width: 420vw;
+        top: 55px;
         height: calc(100vh - 55px);
 
-        filter: blur(30px);
+        background-size: 220% 180%;
 
-        opacity: 0.94;
+        opacity: 0.84;
 
-        animation-duration: 3.8s;
+        transform: scale(1.2);
+
+        animation-duration: 6s;
     }
 
     body::after {
-        left: -160vw;
+        left: -70%;
+        width: 240%;
 
-        width: 420vw;
+        top: 55px;
         height: calc(100vh - 55px);
 
-        filter: blur(36px);
+        background-size: 200% 180%;
 
-        opacity: 0.74;
+        opacity: 0.66;
 
-        animation-duration: 4.8s;
+        transform: scale(1.18);
+
+        animation-duration: 8s;
     }
 }
