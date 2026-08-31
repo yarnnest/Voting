@@ -2887,42 +2887,42 @@ body::before {
             ellipse 42% 28% at 5% 45%,
             rgba(101, 54, 225, 0.42) 0%,
             rgba(101, 54, 225, 0.25) 35%,
-            transparent 72%
+            transparent 65%
         ),
 
         radial-gradient(
             ellipse 44% 25% at 25% 55%,
             rgba(174, 66, 226, 0.36) 0%,
             rgba(174, 66, 226, 0.20) 38%,
-            transparent 72%
+            transparent 65%
         ),
 
         radial-gradient(
             ellipse 45% 27% at 45% 42%,
             rgba(48, 111, 235, 0.34) 0%,
             rgba(48, 111, 235, 0.18) 40%,
-            transparent 72%
+            transparent 65%
         ),
 
         radial-gradient(
             ellipse 42% 25% at 65% 58%,
             rgba(24, 190, 165, 0.32) 0%,
             rgba(24, 190, 165, 0.17) 40%,
-            transparent 72%
+            transparent 65%
         ),
 
         radial-gradient(
             ellipse 45% 28% at 85% 43%,
             rgba(222, 79, 201, 0.32) 0%,
             rgba(222, 79, 201, 0.17) 40%,
-            transparent 72%
+            transparent 65%
         ),
 
         radial-gradient(
             ellipse 40% 25% at 105% 58%,
             rgba(104, 64, 228, 0.34) 0%,
             rgba(104, 64, 228, 0.18) 40%,
-            transparent 72%
+            transparent 65%
         );
 
     filter: blur(32px);
@@ -2958,31 +2958,31 @@ body::after {
         radial-gradient(
             ellipse 46% 20% at 0% 35%,
             rgba(72, 91, 235, 0.22),
-            transparent 70%
+            transparent 60%
         ),
 
         radial-gradient(
             ellipse 48% 22% at 22% 65%,
             rgba(124, 58, 225, 0.24),
-            transparent 70%
+            transparent 60%
         ),
 
         radial-gradient(
             ellipse 46% 21% at 45% 32%,
             rgba(218, 77, 204, 0.22),
-            transparent 70%
+            transparent 60%
         ),
 
         radial-gradient(
             ellipse 48% 23% at 68% 67%,
             rgba(35, 178, 164, 0.22),
-            transparent 70%
+            transparent 60%
         ),
 
         radial-gradient(
             ellipse 46% 21% at 90% 35%,
             rgba(70, 110, 235, 0.24),
-            transparent 70%
+            transparent 60%
         );
 
     filter: blur(40px);
