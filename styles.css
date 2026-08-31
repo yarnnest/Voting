@@ -2854,93 +2854,93 @@ textarea:focus-visible {
 body {
     position: relative;
     min-height: 100vh;
+    background: #f1eff6;
     overflow-x: hidden;
-
-    background:
-        radial-gradient(
-            ellipse 75% 55% at 50% 25%,
-            rgba(108, 45, 220, 0.28),
-            transparent 65%
-        ),
-        radial-gradient(
-            ellipse 55% 45% at 15% 45%,
-            rgba(126, 55, 230, 0.22),
-            transparent 70%
-        ),
-        radial-gradient(
-            ellipse 55% 45% at 88% 55%,
-            rgba(181, 55, 220, 0.18),
-            transparent 70%
-        ),
-        #f3f3f6;
+    isolation: isolate;
 }
 
 
-/* Large blurred smoky light */
+/* Main smoky purple atmosphere */
 
 body::before {
     content: "";
     position: fixed;
 
-    width: 75vw;
-    height: 45vw;
+    top: 0;
+    left: 0;
 
-    max-width: 1100px;
-    max-height: 650px;
+    width: 100%;
+    height: 100%;
 
-    left: 50%;
-    top: 28%;
-
-    transform: translate(-50%, -50%);
+    pointer-events: none;
 
     background:
         radial-gradient(
-            ellipse at 30% 55%,
-            rgba(91, 36, 210, 0.55),
-            transparent 55%
+            ellipse 65% 38% at 50% 30%,
+            rgba(108, 45, 220, 0.34),
+            transparent 68%
         ),
         radial-gradient(
-            ellipse at 70% 45%,
-            rgba(158, 48, 230, 0.48),
-            transparent 55%
+            ellipse 45% 32% at 18% 45%,
+            rgba(126, 55, 230, 0.27),
+            transparent 70%
+        ),
+        radial-gradient(
+            ellipse 48% 34% at 82% 48%,
+            rgba(190, 55, 220, 0.23),
+            transparent 70%
+        ),
+        radial-gradient(
+            ellipse 42% 30% at 50% 78%,
+            rgba(96, 45, 210, 0.20),
+            transparent 72%
         );
 
-    filter: blur(75px);
+    filter: blur(45px);
 
-    opacity: 0.8;
+    opacity: 1;
 
-    pointer-events: none;
-    z-index: -2;
+    z-index: 0;
 }
 
 
-/* Soft atmospheric haze */
+/* Extra soft white haze */
 
 body::after {
     content: "";
-
     position: fixed;
-    inset: -15%;
+
+    inset: 0;
+
+    pointer-events: none;
 
     background:
         radial-gradient(
-            ellipse at 50% 20%,
-            rgba(255, 255, 255, 0.65),
-            transparent 45%
+            ellipse 60% 45% at 50% 25%,
+            rgba(255, 255, 255, 0.72),
+            transparent 65%
         ),
         radial-gradient(
-            ellipse at 20% 75%,
-            rgba(112, 55, 220, 0.18),
-            transparent 45%
+            ellipse 40% 35% at 10% 80%,
+            rgba(255, 255, 255, 0.35),
+            transparent 70%
         ),
         radial-gradient(
-            ellipse at 85% 75%,
-            rgba(194, 70, 220, 0.15),
-            transparent 45%
+            ellipse 40% 35% at 90% 80%,
+            rgba(255, 255, 255, 0.30),
+            transparent 70%
         );
 
-    filter: blur(65px);
+    filter: blur(35px);
 
-    pointer-events: none;
-    z-index: -1;
+    z-index: 0;
+}
+
+
+/* Keep the actual website above the smoke */
+
+.top-navigation,
+.container {
+    position: relative;
+    z-index: 1;
 }
