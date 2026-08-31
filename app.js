@@ -1147,74 +1147,51 @@ function escapeHtml(value) {
 
 
 /* =========================================================
-   LIGHTWEIGHT FLOWING WATER BACKGROUND
-   No blur
-   No gradients
-   No WebGL
-   No pixel calculations
+   LIQUID PURPLE BACKGROUND
+   Lightweight canvas animation
 ========================================================= */
 
-(function createWaterBackground() {
+(function () {
 
     const canvas = document.createElement("canvas");
 
-    canvas.id = "water-background";
-
-    canvas.style.position = "fixed";
-    canvas.style.inset = "0";
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
-    canvas.style.pointerEvents = "none";
-    canvas.style.zIndex = "-1";
+    canvas.id = "liquid-bg";
 
     document.body.prepend(canvas);
-
 
     const ctx = canvas.getContext("2d", {
         alpha: true
     });
 
+    let w = 0;
+    let h = 0;
 
-    /*
-       Deliberately render at a low resolution.
+    let scale = 0.45;
 
-       This is the main performance protection.
-       The browser enlarges the result to the screen.
-    */
+    function resize() {
 
-    const SCALE = 0.55;
-
-    let width = 0;
-    let height = 0;
-
-
-    function resizeCanvas() {
-
-        width = Math.max(
+        w = Math.max(
             320,
-            Math.floor(window.innerWidth * SCALE)
+            Math.floor(window.innerWidth * scale)
         );
 
-        height = Math.max(
+        h = Math.max(
             240,
-            Math.floor(window.innerHeight * SCALE)
+            Math.floor(window.innerHeight * scale)
         );
 
+        canvas.width = w;
+        canvas.height = h;
 
-        canvas.width = width;
-        canvas.height = height;
-
-
-        ctx.imageSmoothingEnabled = true;
+        canvas.style.width = "100vw";
+        canvas.style.height = "100vh";
     }
 
-
-    resizeCanvas();
-
+    resize();
 
     window.addEventListener(
         "resize",
-        resizeCanvas,
+        resize,
         {
             passive: true
         }
@@ -1222,92 +1199,421 @@ function escapeHtml(value) {
 
 
     /*
-       Flow ribbons.
+       Liquid blobs.
 
-       These are deliberately large and stretched.
-       That makes them look like moving water rather
-       than smoke bubbles.
+       These are deliberately large.
+       They overlap to create ONE continuous
+       flowing liquid shape instead of circles.
     */
 
-    const ribbons = [
+    const liquid = [
 
         {
-            y: 0.20,
-            amplitude: 0.055,
-            thickness: 0.14,
-            speed: 0.95,
+            x: 0.10,
+            y: 0.48,
+            size: 0.58,
+            speed: 0.42,
             phase: 0.0,
-            color: "rgba(112, 48, 220, 0.17)"
+            color: [62, 10, 180]
         },
 
         {
-            y: 0.36,
-            amplitude: 0.075,
-            thickness: 0.18,
-            speed: 0.72,
-            phase: 2.2,
-            color: "rgba(150, 55, 235, 0.19)"
+            x: 0.34,
+            y: 0.30,
+            size: 0.52,
+            speed: 0.34,
+            phase: 2.0,
+            color: [112, 20, 235]
         },
 
         {
-            y: 0.52,
-            amplitude: 0.060,
-            thickness: 0.16,
-            speed: 1.05,
-            phase: 4.1,
-            color: "rgba(100, 45, 210, 0.15)"
+            x: 0.58,
+            y: 0.48,
+            size: 0.62,
+            speed: 0.38,
+            phase: 4.0,
+            color: [40, 20, 210]
         },
 
         {
-            y: 0.68,
-            amplitude: 0.080,
-            thickness: 0.17,
-            speed: 0.82,
-            phase: 1.4,
-            color: "rgba(170, 65, 225, 0.16)"
+            x: 0.82,
+            y: 0.35,
+            size: 0.55,
+            speed: 0.30,
+            phase: 1.0,
+            color: [0, 105, 220]
         },
 
         {
-            y: 0.84,
-            amplitude: 0.055,
-            thickness: 0.13,
-            speed: 1.15,
-            phase: 3.3,
-            color: "rgba(105, 40, 205, 0.13)"
+            x: 0.94,
+            y: 0.62,
+            size: 0.52,
+            speed: 0.40,
+            phase: 3.0,
+            color: [0, 175, 225]
         }
 
     ];
 
 
     /*
-       Performance settings.
-
-       50ms = approximately 20 frames per second.
-
-       This is intentional.
-
-       A background does NOT need 60fps.
-       The rest of your website remains much more
-       responsive because this animation gives the
-       browser plenty of breathing room.
+       Dark purple base.
     */
 
-    const FRAME_TIME = 50;
+    function drawBase() {
+
+        ctx.fillStyle =
+            "rgba(18, 5, 65, 0.96)";
+
+        ctx.fillRect(
+            0,
+            0,
+            w,
+            h
+        );
+    }
+
+
+    /*
+       Draw a soft liquid mass.
+
+       Important:
+       This uses translucent overlapping shapes.
+       There are NO blur filters and NO CSS gradients.
+    */
+
+    function drawLiquid(blob, time) {
+
+        const movementX =
+            Math.sin(
+                time * blob.speed +
+                blob.phase
+            ) * w * 0.16;
+
+
+        const movementY =
+            Math.sin(
+                time * blob.speed * 0.72 +
+                blob.phase * 1.7
+            ) * h * 0.15;
+
+
+        const x =
+            w * blob.x +
+            movementX;
+
+
+        const y =
+            h * blob.y +
+            movementY;
+
+
+        const radius =
+            Math.min(w, h) *
+            blob.size;
+
+
+        /*
+           Use many transparent layers.
+
+           This produces a liquid transition
+           without using blur().
+        */
+
+        for (
+            let i = 8;
+            i >= 1;
+            i--
+        ) {
+
+            const ratio =
+                i / 8;
+
+
+            const rx =
+                radius *
+                (0.72 + ratio * 0.48);
+
+
+            const ry =
+                radius *
+                (0.32 + ratio * 0.26);
+
+
+            const wave =
+                Math.sin(
+                    time *
+                    blob.speed *
+                    1.8 +
+                    blob.phase +
+                    i
+                );
+
+
+            const offsetX =
+                wave *
+                radius *
+                0.13;
+
+
+            const offsetY =
+                Math.cos(
+                    time *
+                    blob.speed *
+                    1.3 +
+                    i
+                ) *
+                radius *
+                0.08;
+
+
+            ctx.beginPath();
+
+
+            ctx.ellipse(
+                x + offsetX,
+                y + offsetY,
+                rx,
+                ry,
+                wave * 0.16,
+                0,
+                Math.PI * 2
+            );
+
+
+            const alpha =
+                0.025 +
+                (1 - ratio) * 0.025;
+
+
+            ctx.fillStyle =
+                `rgba(
+                    ${blob.color[0]},
+                    ${blob.color[1]},
+                    ${blob.color[2]},
+                    ${alpha}
+                )`;
+
+
+            ctx.fill();
+        }
+    }
+
+
+    /*
+       Long flowing liquid streams.
+
+       These connect the large masses so the result
+       feels like one continuous body of water.
+    */
+
+    function drawFlow(time) {
+
+        const lines = 7;
+
+
+        for (
+            let i = 0;
+            i < lines;
+            i++
+        ) {
+
+            const baseY =
+                h *
+                (
+                    0.20 +
+                    i * 0.11
+                );
+
+
+            ctx.beginPath();
+
+
+            for (
+                let x = -80;
+                x <= w + 80;
+                x += 20
+            ) {
+
+                const normalized =
+                    x / w;
+
+
+                const wave1 =
+                    Math.sin(
+                        normalized * 4.0 +
+                        time * 0.48 +
+                        i
+                    );
+
+
+                const wave2 =
+                    Math.sin(
+                        normalized * 8.0 -
+                        time * 0.32 +
+                        i * 0.8
+                    );
+
+
+                const y =
+                    baseY +
+                    wave1 * h * 0.08 +
+                    wave2 * h * 0.035;
+
+
+                if (x === -80) {
+
+                    ctx.moveTo(
+                        x,
+                        y
+                    );
+
+                } else {
+
+                    ctx.lineTo(
+                        x,
+                        y
+                    );
+                }
+            }
+
+
+            ctx.lineTo(
+                w + 80,
+                baseY + h * 0.11
+            );
+
+            ctx.lineTo(
+                -80,
+                baseY + h * 0.11
+            );
+
+            ctx.closePath();
+
+
+            const colors = [
+
+                "rgba(67, 18, 190, 0.035)",
+
+                "rgba(103, 25, 225, 0.04)",
+
+                "rgba(20, 80, 210, 0.035)",
+
+                "rgba(0, 145, 220, 0.035)"
+
+            ];
+
+
+            ctx.fillStyle =
+                colors[
+                    i %
+                    colors.length
+                ];
+
+
+            ctx.fill();
+        }
+    }
+
+
+    /*
+       Bright liquid highlights.
+
+       These are very subtle and give the water
+       some dimensional movement.
+    */
+
+    function drawHighlights(time) {
+
+        for (
+            let i = 0;
+            i < 3;
+            i++
+        ) {
+
+            ctx.beginPath();
+
+
+            for (
+                let x = -50;
+                x <= w + 50;
+                x += 25
+            ) {
+
+                const nx =
+                    x / w;
+
+
+                const y =
+                    h *
+                    (
+                        0.28 +
+                        i * 0.22
+                    )
+                    +
+                    Math.sin(
+                        nx * 5.0 +
+                        time * 0.55 +
+                        i
+                    ) *
+                    h *
+                    0.075;
+
+
+                if (x === -50) {
+
+                    ctx.moveTo(
+                        x,
+                        y
+                    );
+
+                } else {
+
+                    ctx.lineTo(
+                        x,
+                        y
+                    );
+                }
+            }
+
+
+            ctx.strokeStyle =
+                "rgba(100, 170, 255, 0.08)";
+
+
+            ctx.lineWidth =
+                Math.max(
+                    1,
+                    h * 0.008
+                );
+
+
+            ctx.stroke();
+        }
+    }
+
+
+    /*
+       Animation
+    */
 
     let lastFrame = 0;
 
-    let animationTime = 0;
+    const frameInterval = 45;
+
+    let time = 0;
 
 
-    function drawWater(timestamp) {
+    function animate(timestamp) {
 
         if (
-            timestamp - lastFrame <
-            FRAME_TIME
+            timestamp -
+            lastFrame <
+            frameInterval
         ) {
 
             requestAnimationFrame(
-                drawWater
+                animate
             );
 
             return;
@@ -1321,271 +1627,63 @@ function escapeHtml(value) {
             );
 
 
-        lastFrame = timestamp;
+        lastFrame =
+            timestamp;
 
 
-        animationTime +=
+        time +=
             delta * 0.001;
 
-
-        /*
-           Clear the previous frame.
-        */
 
         ctx.clearRect(
             0,
             0,
-            width,
-            height
+            w,
+            h
         );
 
 
+        drawBase();
+
+
         /*
-           Draw each liquid ribbon.
+           Large liquid bodies
         */
 
-        ribbons.forEach(
-            ribbon => {
+        liquid.forEach(
+            blob => {
 
-                const centerY =
-                    height *
-                    ribbon.y;
-
-
-                const amplitude =
-                    height *
-                    ribbon.amplitude;
-
-
-                const thickness =
-                    height *
-                    ribbon.thickness;
-
-
-                ctx.beginPath();
-
-
-                /*
-                   Top edge
-                */
-
-                for (
-                    let x = -40;
-                    x <= width + 40;
-                    x += 18
-                ) {
-
-                    const normalizedX =
-                        x / width;
-
-
-                    const wave =
-                        Math.sin(
-                            normalizedX * 7.0
-                            +
-                            animationTime *
-                            ribbon.speed
-                            +
-                            ribbon.phase
-                        );
-
-
-                    const secondaryWave =
-                        Math.sin(
-                            normalizedX * 13.0
-                            -
-                            animationTime *
-                            ribbon.speed *
-                            0.55
-                            +
-                            ribbon.phase
-                        );
-
-
-                    const y =
-                        centerY
-                        +
-                        wave *
-                        amplitude
-                        +
-                        secondaryWave *
-                        amplitude *
-                        0.32
-                        -
-                        thickness / 2;
-
-
-                    if (x === -40) {
-
-                        ctx.moveTo(
-                            x,
-                            y
-                        );
-
-                    } else {
-
-                        ctx.lineTo(
-                            x,
-                            y
-                        );
-                    }
-                }
-
-
-                /*
-                   Bottom edge
-                */
-
-                for (
-                    let x = width + 40;
-                    x >= -40;
-                    x -= 18
-                ) {
-
-                    const normalizedX =
-                        x / width;
-
-
-                    const wave =
-                        Math.sin(
-                            normalizedX * 7.0
-                            +
-                            animationTime *
-                            ribbon.speed
-                            +
-                            ribbon.phase
-                        );
-
-
-                    const secondaryWave =
-                        Math.sin(
-                            normalizedX * 13.0
-                            -
-                            animationTime *
-                            ribbon.speed *
-                            0.55
-                            +
-                            ribbon.phase
-                        );
-
-
-                    const y =
-                        centerY
-                        +
-                        wave *
-                        amplitude
-                        +
-                        secondaryWave *
-                        amplitude *
-                        0.32
-                        +
-                        thickness / 2;
-
-
-                    ctx.lineTo(
-                        x,
-                        y
-                    );
-                }
-
-
-                ctx.closePath();
-
-
-                ctx.fillStyle =
-                    ribbon.color;
-
-
-                ctx.fill();
-
-
-                /*
-                   Thin liquid highlight.
-
-                   This gives the water a sense of
-                   direction without using blur.
-                */
-
-                ctx.beginPath();
-
-
-                for (
-                    let x = -40;
-                    x <= width + 40;
-                    x += 24
-                ) {
-
-                    const normalizedX =
-                        x / width;
-
-
-                    const wave =
-                        Math.sin(
-                            normalizedX * 7.0
-                            +
-                            animationTime *
-                            ribbon.speed
-                            +
-                            ribbon.phase
-                        );
-
-
-                    const y =
-                        centerY
-                        +
-                        wave *
-                        amplitude
-                        -
-                        thickness *
-                        0.16;
-
-
-                    if (x === -40) {
-
-                        ctx.moveTo(
-                            x,
-                            y
-                        );
-
-                    } else {
-
-                        ctx.lineTo(
-                            x,
-                            y
-                        );
-                    }
-                }
-
-
-                ctx.strokeStyle =
-                    ribbon.color.replace(
-                        "0.17",
-                        "0.30"
-                    );
-
-
-                ctx.lineWidth =
-                    Math.max(
-                        1,
-                        height * 0.006
-                    );
-
-
-                ctx.stroke();
+                drawLiquid(
+                    blob,
+                    time
+                );
 
             }
         );
 
 
+        /*
+           Connecting water flow
+        */
+
+        drawFlow(time);
+
+
+        /*
+           Subtle highlights
+        */
+
+        drawHighlights(time);
+
+
         requestAnimationFrame(
-            drawWater
+            animate
         );
     }
 
 
     requestAnimationFrame(
-        drawWater
+        animate
     );
-
 
 })();
