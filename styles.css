@@ -309,6 +309,46 @@ img {
         1.7;
 }
 
+.hero-title {
+    margin: 0;
+    padding: 0 16px;
+    text-align: center;
+    font-size: clamp(48px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -4px;
+    font-weight: 900;
+    overflow: visible;
+}
+
+.hero-title span {
+    display: block;
+    white-space: nowrap;
+}
+
+.hero-accent {
+    font-style: italic;
+    background: linear-gradient(
+        90deg,
+        #7c3aed,
+        #ec4899,
+        #ff7043
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+@media (max-width: 600px) {
+
+    .hero-title {
+        font-size: clamp(48px, 14vw, 70px);
+        line-height: 0.92;
+        letter-spacing: -3px;
+        padding: 0 10px;
+    }
+
+}
+
 
 /* =========================================================
    LOADING
@@ -2760,4 +2800,23 @@ textarea:focus-visible {
     content: "↗";
     margin-left: 6px;
     font-size: 12px;
+}
+
+
+.custom-vote-logo {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: #111111;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.custom-vote-logo svg {
+    width: 27px;
+    height: 27px;
+    display: block;
 }
