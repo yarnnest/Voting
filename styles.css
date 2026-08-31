@@ -2550,13 +2550,7 @@ img {
             94%;
     }
 
-    .homepage {
-        padding-top:
-            45px;
 
-        padding-bottom:
-            65px;
-    }
 
     .hero {
         margin-bottom:
@@ -2943,4 +2937,111 @@ body::after {
 .container {
     position: relative;
     z-index: 1;
+}
+
+
+
+/* =========================================================
+   ANIMATED SMOKY PURPLE BACKGROUND
+========================================================= */
+
+.homepage {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 72px);
+
+    background:
+        radial-gradient(
+            ellipse 55% 35% at 50% 18%,
+            rgba(120, 70, 235, 0.32) 0%,
+            rgba(120, 70, 235, 0.16) 38%,
+            transparent 72%
+        ),
+        radial-gradient(
+            ellipse 42% 38% at 12% 45%,
+            rgba(105, 65, 225, 0.28) 0%,
+            rgba(105, 65, 225, 0.12) 42%,
+            transparent 72%
+        ),
+        radial-gradient(
+            ellipse 42% 38% at 88% 48%,
+            rgba(205, 75, 220, 0.24) 0%,
+            rgba(205, 75, 220, 0.10) 42%,
+            transparent 72%
+        ),
+        radial-gradient(
+            ellipse 45% 35% at 50% 85%,
+            rgba(125, 70, 225, 0.18) 0%,
+            transparent 72%
+        ),
+        #f3f1f8;
+
+    background-size:
+        160% 160%,
+        170% 170%,
+        165% 165%,
+        160% 160%,
+        100% 100%;
+
+    background-position:
+        0% 0%,
+        100% 0%,
+        0% 100%,
+        100% 100%,
+        center;
+
+    animation: smokyGradientMove 10s ease-in-out infinite alternate;
+}
+
+
+/* =========================================================
+   SMOKY GRADIENT MOTION
+========================================================= */
+
+@keyframes smokyGradientMove {
+
+    0% {
+        background-position:
+            0% 0%,
+            100% 0%,
+            0% 100%,
+            100% 100%,
+            center;
+    }
+
+    25% {
+        background-position:
+            35% 20%,
+            70% 10%,
+            15% 75%,
+            85% 90%,
+            center;
+    }
+
+    50% {
+        background-position:
+            75% 40%,
+            25% 35%,
+            70% 55%,
+            30% 65%,
+            center;
+    }
+
+    75% {
+        background-position:
+            45% 75%,
+            80% 65%,
+            25% 35%,
+            70% 25%,
+            center;
+    }
+
+    100% {
+        background-position:
+            100% 100%,
+            0% 100%,
+            100% 0%,
+            0% 0%,
+            center;
+    }
 }
