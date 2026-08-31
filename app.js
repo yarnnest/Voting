@@ -1147,656 +1147,444 @@ function escapeHtml(value) {
 
 
 /* =========================================================
-   GPU FLOWING INK BACKGROUND
-   JavaScript + WebGL
+   LIGHTWEIGHT FLOWING WATER BACKGROUND
+   No blur
+   No gradients
+   No WebGL
+   No pixel calculations
 ========================================================= */
 
-(function createInkBackground() {
+(function createWaterBackground() {
 
     const canvas = document.createElement("canvas");
 
-    canvas.id = "ink-background";
+    canvas.id = "water-background";
 
     canvas.style.position = "fixed";
-    canvas.style.left = "0";
-    canvas.style.top = "0";
-    canvas.style.width = "100vw";
-    canvas.style.height = "100vh";
+    canvas.style.inset = "0";
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
     canvas.style.pointerEvents = "none";
-    canvas.style.zIndex = "0";
+    canvas.style.zIndex = "-1";
 
     document.body.prepend(canvas);
 
 
-    /* Put all website content above the canvas */
-
-    Array.from(document.body.children).forEach(element => {
-
-        if (element !== canvas) {
-
-            element.style.position =
-                element.style.position || "relative";
-
-            element.style.zIndex =
-                element.style.zIndex || "1";
-        }
+    const ctx = canvas.getContext("2d", {
+        alpha: true
     });
 
 
-    const gl =
-        canvas.getContext("webgl",
-        {
-            alpha: true,
-            antialias: false,
-            powerPreference: "high-performance"
-        });
+    /*
+       Deliberately render at a low resolution.
+
+       This is the main performance protection.
+       The browser enlarges the result to the screen.
+    */
+
+    const SCALE = 0.55;
+
+    let width = 0;
+    let height = 0;
 
 
-    if (!gl) {
+    function resizeCanvas() {
 
-        console.warn(
-            "WebGL is not available on this device."
+        width = Math.max(
+            320,
+            Math.floor(window.innerWidth * SCALE)
         );
 
-        return;
+        height = Math.max(
+            240,
+            Math.floor(window.innerHeight * SCALE)
+        );
+
+
+        canvas.width = width;
+        canvas.height = height;
+
+
+        ctx.imageSmoothingEnabled = true;
     }
 
 
-    /* =====================================================
-       VERTEX SHADER
-    ===================================================== */
-
-    const vertexShaderSource = `
-
-        attribute vec2 position;
-
-        void main() {
-
-            gl_Position =
-                vec4(position, 0.0, 1.0);
-
-        }
-
-    `;
-
-
-    /* =====================================================
-       FRAGMENT SHADER
-    ===================================================== */
-
-    const fragmentShaderSource = `
-
-        precision highp float;
-
-        uniform vec2 resolution;
-        uniform float time;
-
-
-        /* -----------------------------------------------
-           Basic random
-        ------------------------------------------------ */
-
-        float random(vec2 p) {
-
-            return fract(
-                sin(
-                    dot(
-                        p,
-                        vec2(
-                            127.1,
-                            311.7
-                        )
-                    )
-                ) * 43758.5453123
-            );
-
-        }
-
-
-        /* -----------------------------------------------
-           Smooth noise
-        ------------------------------------------------ */
-
-        float noise(vec2 p) {
-
-            vec2 i = floor(p);
-            vec2 f = fract(p);
-
-            f = f * f * (3.0 - 2.0 * f);
-
-            float a = random(i);
-            float b = random(i + vec2(1.0, 0.0));
-            float c = random(i + vec2(0.0, 1.0));
-            float d = random(i + vec2(1.0, 1.0));
-
-            return mix(
-                mix(a, b, f.x),
-                mix(c, d, f.x),
-                f.y
-            );
-
-        }
-
-
-        /* -----------------------------------------------
-           Fractal noise
-        ------------------------------------------------ */
-
-        float fbm(vec2 p) {
-
-            float value = 0.0;
-
-            float amplitude = 0.5;
-
-            for (int i = 0; i < 5; i++) {
-
-                value +=
-                    amplitude *
-                    noise(p);
-
-                p *= 2.0;
-
-                amplitude *= 0.5;
-            }
-
-            return value;
-
-        }
-
-
-        /* -----------------------------------------------
-           Main liquid distortion
-        ------------------------------------------------ */
-
-        void main() {
-
-            vec2 uv =
-                gl_FragCoord.xy /
-                resolution.xy;
-
-
-            float aspect =
-                resolution.x /
-                resolution.y;
-
-
-            vec2 p = uv;
-
-            p.x *= aspect;
-
-
-            /* -------------------------------------------
-               Fast horizontal water movement
-            ------------------------------------------- */
-
-            float movement =
-                time * 0.18;
-
-
-            vec2 flow =
-                vec2(
-                    movement,
-                    sin(time * 0.35) * 0.08
-                );
-
-
-            /* -------------------------------------------
-               Large organic deformation
-            ------------------------------------------- */
-
-            vec2 warp =
-                vec2(
-                    fbm(p * 2.0 + flow),
-                    fbm(
-                        p * 2.0
-                        + flow
-                        + vec2(4.7, 2.1)
-                    )
-                );
-
-
-            p +=
-                (warp - 0.5)
-                * 0.42;
-
-
-            /* -------------------------------------------
-               Long flowing ink bands
-            ------------------------------------------- */
-
-            float wave1 =
-                sin(
-                    p.y * 5.0
-                    + p.x * 2.5
-                    + time * 0.65
-                    + fbm(p * 2.5) * 3.0
-                );
-
-
-            float wave2 =
-                sin(
-                    p.y * 9.0
-                    - p.x * 3.0
-                    - time * 0.48
-                    + fbm(p * 3.0) * 4.0
-                );
-
-
-            float flowShape =
-                wave1 * 0.55
-                + wave2 * 0.25;
-
-
-            /* -------------------------------------------
-               Organic liquid mask
-            ------------------------------------------- */
-
-            float liquid =
-                fbm(
-                    p * 2.2
-                    + vec2(
-                        time * 0.12,
-                        -time * 0.04
-                    )
-                );
-
-
-            liquid =
-                liquid
-                + flowShape * 0.18;
-
-
-            /* -------------------------------------------
-               Purple ink concentration
-            ------------------------------------------- */
-
-            float ink =
-                smoothstep(
-                    0.42,
-                    0.68,
-                    liquid
-                );
-
-
-            /* Additional flowing areas */
-
-            float ink2 =
-                smoothstep(
-                    0.47,
-                    0.72,
-                    fbm(
-                        p * 3.8
-                        - vec2(
-                            time * 0.18,
-                            time * 0.06
-                        )
-                    )
-                );
-
-
-            ink =
-                max(
-                    ink,
-                    ink2 * 0.55
-                );
-
-
-            /* -------------------------------------------
-               Purple / violet liquid colours
-            ------------------------------------------- */
-
-            vec3 lightPurple =
-                vec3(
-                    0.56,
-                    0.20,
-                    0.95
-                );
-
-
-            vec3 deepPurple =
-                vec3(
-                    0.20,
-                    0.035,
-                    0.55
-                );
-
-
-            vec3 pinkPurple =
-                vec3(
-                    0.78,
-                    0.16,
-                    0.72
-                );
-
-
-            vec3 colour =
-                mix(
-                    lightPurple,
-                    deepPurple,
-                    smoothstep(
-                        0.40,
-                        0.85,
-                        liquid
-                    )
-                );
-
-
-            colour =
-                mix(
-                    colour,
-                    pinkPurple,
-                    ink2 * 0.35
-                );
-
-
-            /* -------------------------------------------
-               Fade edges
-            ------------------------------------------- */
-
-            float edgeFade =
-                smoothstep(
-                    0.02,
-                    0.16,
-                    uv.x
-                )
-                *
-                smoothstep(
-                    0.02,
-                    0.16,
-                    1.0 - uv.x
-                )
-                *
-                smoothstep(
-                    0.02,
-                    0.14,
-                    uv.y
-                )
-                *
-                smoothstep(
-                    0.02,
-                    0.14,
-                    1.0 - uv.y
-                );
-
-
-            float alpha =
-                ink
-                * 0.78
-                * edgeFade;
-
-
-            /* -------------------------------------------
-               Transparent background
-            ------------------------------------------- */
-
-            gl_FragColor =
-                vec4(
-                    colour,
-                    alpha
-                );
-
-        }
-
-    `;
-
-
-    /* =====================================================
-       SHADER COMPILATION
-    ===================================================== */
-
-    function compileShader(type, source) {
-
-        const shader =
-            gl.createShader(type);
-
-        gl.shaderSource(
-            shader,
-            source
-        );
-
-        gl.compileShader(shader);
-
-
-        if (
-            !gl.getShaderParameter(
-                shader,
-                gl.COMPILE_STATUS
-            )
-        ) {
-
-            console.error(
-                gl.getShaderInfoLog(shader)
-            );
-
-            gl.deleteShader(shader);
-
-            return null;
-        }
-
-
-        return shader;
-    }
-
-
-    const vertexShader =
-        compileShader(
-            gl.VERTEX_SHADER,
-            vertexShaderSource
-        );
-
-
-    const fragmentShader =
-        compileShader(
-            gl.FRAGMENT_SHADER,
-            fragmentShaderSource
-        );
-
-
-    if (!vertexShader || !fragmentShader) {
-
-        return;
-    }
-
-
-    /* =====================================================
-       PROGRAM
-    ===================================================== */
-
-    const program =
-        gl.createProgram();
-
-
-    gl.attachShader(
-        program,
-        vertexShader
-    );
-
-    gl.attachShader(
-        program,
-        fragmentShader
-    );
-
-    gl.linkProgram(program);
-
-
-    if (
-        !gl.getProgramParameter(
-            program,
-            gl.LINK_STATUS
-        )
-    ) {
-
-        console.error(
-            gl.getProgramInfoLog(program)
-        );
-
-        return;
-    }
-
-
-    gl.useProgram(program);
-
-
-    /* =====================================================
-       FULL SCREEN QUAD
-    ===================================================== */
-
-    const buffer =
-        gl.createBuffer();
-
-
-    gl.bindBuffer(
-        gl.ARRAY_BUFFER,
-        buffer
-    );
-
-
-    gl.bufferData(
-        gl.ARRAY_BUFFER,
-
-        new Float32Array([
-            -1, -1,
-             1, -1,
-            -1,  1,
-
-            -1,  1,
-             1, -1,
-             1,  1
-        ]),
-
-        gl.STATIC_DRAW
-    );
-
-
-    const positionLocation =
-        gl.getAttribLocation(
-            program,
-            "position"
-        );
-
-
-    gl.enableVertexAttribArray(
-        positionLocation
-    );
-
-
-    gl.vertexAttribPointer(
-        positionLocation,
-        2,
-        gl.FLOAT,
-        false,
-        0,
-        0
-    );
-
-
-    const resolutionLocation =
-        gl.getUniformLocation(
-            program,
-            "resolution"
-        );
-
-
-    const timeLocation =
-        gl.getUniformLocation(
-            program,
-            "time"
-        );
-
-
-    /* =====================================================
-       PERFORMANCE SETTINGS
-    ===================================================== */
-
-    let pixelRatio =
-        Math.min(
-            window.devicePixelRatio || 1,
-            1.5
-        );
-
-
-    function resize() {
-
-        const width =
-            window.innerWidth;
-
-
-        const height =
-            window.innerHeight;
-
-
-        canvas.width =
-            Math.floor(
-                width * pixelRatio
-            );
-
-
-        canvas.height =
-            Math.floor(
-                height * pixelRatio
-            );
-
-
-        gl.viewport(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
-
-        gl.uniform2f(
-            resolutionLocation,
-            canvas.width,
-            canvas.height
-        );
-    }
-
-
-    resize();
+    resizeCanvas();
 
 
     window.addEventListener(
         "resize",
-        resize
+        resizeCanvas,
+        {
+            passive: true
+        }
     );
 
 
-    /* =====================================================
-       ANIMATION
-    ===================================================== */
+    /*
+       Flow ribbons.
 
-    const start =
-        performance.now();
+       These are deliberately large and stretched.
+       That makes them look like moving water rather
+       than smoke bubbles.
+    */
+
+    const ribbons = [
+
+        {
+            y: 0.20,
+            amplitude: 0.055,
+            thickness: 0.14,
+            speed: 0.95,
+            phase: 0.0,
+            color: "rgba(112, 48, 220, 0.17)"
+        },
+
+        {
+            y: 0.36,
+            amplitude: 0.075,
+            thickness: 0.18,
+            speed: 0.72,
+            phase: 2.2,
+            color: "rgba(150, 55, 235, 0.19)"
+        },
+
+        {
+            y: 0.52,
+            amplitude: 0.060,
+            thickness: 0.16,
+            speed: 1.05,
+            phase: 4.1,
+            color: "rgba(100, 45, 210, 0.15)"
+        },
+
+        {
+            y: 0.68,
+            amplitude: 0.080,
+            thickness: 0.17,
+            speed: 0.82,
+            phase: 1.4,
+            color: "rgba(170, 65, 225, 0.16)"
+        },
+
+        {
+            y: 0.84,
+            amplitude: 0.055,
+            thickness: 0.13,
+            speed: 1.15,
+            phase: 3.3,
+            color: "rgba(105, 40, 205, 0.13)"
+        }
+
+    ];
 
 
-    function animate(now) {
+    /*
+       Performance settings.
 
-        const elapsed =
-            (now - start) / 1000;
+       50ms = approximately 20 frames per second.
+
+       This is intentional.
+
+       A background does NOT need 60fps.
+       The rest of your website remains much more
+       responsive because this animation gives the
+       browser plenty of breathing room.
+    */
+
+    const FRAME_TIME = 50;
+
+    let lastFrame = 0;
+
+    let animationTime = 0;
 
 
-        gl.uniform1f(
-            timeLocation,
-            elapsed
+    function drawWater(timestamp) {
+
+        if (
+            timestamp - lastFrame <
+            FRAME_TIME
+        ) {
+
+            requestAnimationFrame(
+                drawWater
+            );
+
+            return;
+        }
+
+
+        const delta =
+            Math.min(
+                timestamp - lastFrame,
+                100
+            );
+
+
+        lastFrame = timestamp;
+
+
+        animationTime +=
+            delta * 0.001;
+
+
+        /*
+           Clear the previous frame.
+        */
+
+        ctx.clearRect(
+            0,
+            0,
+            width,
+            height
         );
 
 
-        gl.drawArrays(
-            gl.TRIANGLES,
-            0,
-            6
+        /*
+           Draw each liquid ribbon.
+        */
+
+        ribbons.forEach(
+            ribbon => {
+
+                const centerY =
+                    height *
+                    ribbon.y;
+
+
+                const amplitude =
+                    height *
+                    ribbon.amplitude;
+
+
+                const thickness =
+                    height *
+                    ribbon.thickness;
+
+
+                ctx.beginPath();
+
+
+                /*
+                   Top edge
+                */
+
+                for (
+                    let x = -40;
+                    x <= width + 40;
+                    x += 18
+                ) {
+
+                    const normalizedX =
+                        x / width;
+
+
+                    const wave =
+                        Math.sin(
+                            normalizedX * 7.0
+                            +
+                            animationTime *
+                            ribbon.speed
+                            +
+                            ribbon.phase
+                        );
+
+
+                    const secondaryWave =
+                        Math.sin(
+                            normalizedX * 13.0
+                            -
+                            animationTime *
+                            ribbon.speed *
+                            0.55
+                            +
+                            ribbon.phase
+                        );
+
+
+                    const y =
+                        centerY
+                        +
+                        wave *
+                        amplitude
+                        +
+                        secondaryWave *
+                        amplitude *
+                        0.32
+                        -
+                        thickness / 2;
+
+
+                    if (x === -40) {
+
+                        ctx.moveTo(
+                            x,
+                            y
+                        );
+
+                    } else {
+
+                        ctx.lineTo(
+                            x,
+                            y
+                        );
+                    }
+                }
+
+
+                /*
+                   Bottom edge
+                */
+
+                for (
+                    let x = width + 40;
+                    x >= -40;
+                    x -= 18
+                ) {
+
+                    const normalizedX =
+                        x / width;
+
+
+                    const wave =
+                        Math.sin(
+                            normalizedX * 7.0
+                            +
+                            animationTime *
+                            ribbon.speed
+                            +
+                            ribbon.phase
+                        );
+
+
+                    const secondaryWave =
+                        Math.sin(
+                            normalizedX * 13.0
+                            -
+                            animationTime *
+                            ribbon.speed *
+                            0.55
+                            +
+                            ribbon.phase
+                        );
+
+
+                    const y =
+                        centerY
+                        +
+                        wave *
+                        amplitude
+                        +
+                        secondaryWave *
+                        amplitude *
+                        0.32
+                        +
+                        thickness / 2;
+
+
+                    ctx.lineTo(
+                        x,
+                        y
+                    );
+                }
+
+
+                ctx.closePath();
+
+
+                ctx.fillStyle =
+                    ribbon.color;
+
+
+                ctx.fill();
+
+
+                /*
+                   Thin liquid highlight.
+
+                   This gives the water a sense of
+                   direction without using blur.
+                */
+
+                ctx.beginPath();
+
+
+                for (
+                    let x = -40;
+                    x <= width + 40;
+                    x += 24
+                ) {
+
+                    const normalizedX =
+                        x / width;
+
+
+                    const wave =
+                        Math.sin(
+                            normalizedX * 7.0
+                            +
+                            animationTime *
+                            ribbon.speed
+                            +
+                            ribbon.phase
+                        );
+
+
+                    const y =
+                        centerY
+                        +
+                        wave *
+                        amplitude
+                        -
+                        thickness *
+                        0.16;
+
+
+                    if (x === -40) {
+
+                        ctx.moveTo(
+                            x,
+                            y
+                        );
+
+                    } else {
+
+                        ctx.lineTo(
+                            x,
+                            y
+                        );
+                    }
+                }
+
+
+                ctx.strokeStyle =
+                    ribbon.color.replace(
+                        "0.17",
+                        "0.30"
+                    );
+
+
+                ctx.lineWidth =
+                    Math.max(
+                        1,
+                        height * 0.006
+                    );
+
+
+                ctx.stroke();
+
+            }
         );
 
 
         requestAnimationFrame(
-            animate
+            drawWater
         );
     }
 
 
     requestAnimationFrame(
-        animate
+        drawWater
     );
 
 
