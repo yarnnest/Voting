@@ -2840,110 +2840,197 @@ textarea:focus-visible {
 }
 
 
+
+
 /* =========================================================
-   SINGLE FULL PAGE SMOKY BACKGROUND
+   FAST VISIBLE SMOKY BACKGROUND
 ========================================================= */
 
 body {
     position: relative;
     min-height: 100vh;
-    background: #eeecf5;
+    background: #eeeaf7;
     overflow-x: hidden;
     isolation: isolate;
 }
 
 
-/* =========================================================
-   MOVING SMOKE
-========================================================= */
+/* Main visible smoke */
 
 body::before {
     content: "";
     position: fixed;
 
-    width: 120vw;
-    height: 90vh;
+    width: 140vw;
+    height: 110vh;
 
-    left: -10vw;
-    top: 5vh;
+    left: -20vw;
+    top: -5vh;
 
     pointer-events: none;
 
     background:
         radial-gradient(
-            ellipse 32% 42% at 25% 50%,
-            rgba(91, 35, 210, 0.70) 0%,
-            rgba(110, 45, 225, 0.52) 30%,
-            rgba(140, 65, 235, 0.28) 50%,
-            transparent 75%
+            ellipse 24% 32% at 20% 45%,
+            rgba(89, 30, 220, 0.82) 0%,
+            rgba(111, 40, 230, 0.65) 45%,
+            transparent 72%
         ),
+
         radial-gradient(
-            ellipse 28% 38% at 72% 42%,
-            rgba(180, 45, 220, 0.58) 0%,
-            rgba(160, 55, 225, 0.40) 32%,
-            rgba(130, 60, 220, 0.18) 52%,
-            transparent 75%
+            ellipse 22% 30% at 48% 30%,
+            rgba(157, 35, 230, 0.78) 0%,
+            rgba(180, 45, 225, 0.55) 42%,
+            transparent 70%
         ),
+
         radial-gradient(
-            ellipse 25% 30% at 50% 75%,
-            rgba(100, 45, 220, 0.38) 0%,
-            rgba(120, 55, 225, 0.18) 40%,
+            ellipse 25% 34% at 78% 55%,
+            rgba(106, 35, 225, 0.82) 0%,
+            rgba(139, 45, 225, 0.58) 42%,
+            transparent 72%
+        ),
+
+        radial-gradient(
+            ellipse 20% 26% at 60% 82%,
+            rgba(194, 48, 220, 0.62) 0%,
+            rgba(150, 45, 225, 0.38) 45%,
             transparent 72%
         );
 
-    filter: blur(75px);
+    opacity: 0.9;
 
-    opacity: 0.95;
+    transform: translate3d(0, 0, 0) scale(1.05);
 
-    transform: translate3d(0, 0, 0) scale(1.15);
+    animation: fastSmokeMovement 6s ease-in-out infinite alternate;
 
-    animation: smokeFlow 12s ease-in-out infinite alternate;
+    z-index: -1;
+}
+
+
+/* Secondary smoke layer */
+
+body::after {
+    content: "";
+
+    position: fixed;
+
+    width: 130vw;
+    height: 100vh;
+
+    left: -15vw;
+    top: 0;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse 18% 25% at 35% 70%,
+            rgba(72, 35, 205, 0.65),
+            transparent 68%
+        ),
+
+        radial-gradient(
+            ellipse 20% 27% at 85% 25%,
+            rgba(205, 55, 220, 0.60),
+            transparent 70%
+        ),
+
+        radial-gradient(
+            ellipse 16% 23% at 10% 20%,
+            rgba(120, 45, 225, 0.55),
+            transparent 68%
+        );
+
+    opacity: 0.75;
+
+    transform: translate3d(0, 0, 0) scale(1.08);
+
+    animation: secondarySmokeMovement 7s ease-in-out infinite alternate;
 
     z-index: -1;
 }
 
 
 /* =========================================================
-   SMOOTH SMOKE MOVEMENT
+   FAST SMOKE MOTION
 ========================================================= */
 
-@keyframes smokeFlow {
+@keyframes fastSmokeMovement {
 
     0% {
         transform:
-            translate3d(-5%, -2%, 0)
+            translate3d(-12%, -5%, 0)
+            scale(1.05);
+    }
+
+    20% {
+        transform:
+            translate3d(5%, 8%, 0)
+            scale(1.12);
+    }
+
+    40% {
+        transform:
+            translate3d(14%, -4%, 0)
+            scale(1.08);
+    }
+
+    60% {
+        transform:
+            translate3d(-4%, 12%, 0)
             scale(1.15);
     }
 
-    25% {
+    80% {
         transform:
-            translate3d(3%, 3%, 0)
-            scale(1.20);
-    }
-
-    50% {
-        transform:
-            translate3d(7%, -2%, 0)
-            scale(1.17);
-    }
-
-    75% {
-        transform:
-            translate3d(-2%, 5%, 0)
-            scale(1.22);
+            translate3d(-15%, 2%, 0)
+            scale(1.10);
     }
 
     100% {
         transform:
-            translate3d(-7%, -3%, 0)
-            scale(1.18);
+            translate3d(10%, -8%, 0)
+            scale(1.16);
     }
 }
 
 
-/* =========================================================
-   KEEP WEBSITE CONTENT ABOVE SMOKE
-========================================================= */
+@keyframes secondarySmokeMovement {
+
+    0% {
+        transform:
+            translate3d(12%, 5%, 0)
+            scale(1.08);
+    }
+
+    25% {
+        transform:
+            translate3d(-8%, -8%, 0)
+            scale(1.14);
+    }
+
+    50% {
+        transform:
+            translate3d(-15%, 8%, 0)
+            scale(1.10);
+    }
+
+    75% {
+        transform:
+            translate3d(8%, -5%, 0)
+            scale(1.16);
+    }
+
+    100% {
+        transform:
+            translate3d(15%, 10%, 0)
+            scale(1.08);
+    }
+}
+
+
+/* Keep website above the smoke */
 
 .top-navigation,
 .homepage {
