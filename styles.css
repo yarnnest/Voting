@@ -2860,12 +2860,11 @@ textarea:focus-visible {
 
 
 /* =========================================================
-   FINAL MOVING LIQUID GRADIENT
+   LIGHT FAST MOVING LIQUID GRADIENT
    ========================================================= */
 
 html {
-    min-height: 100%;
-    background: #f5f2fa !important;
+    background: #f5f3f9 !important;
 }
 
 body {
@@ -2873,73 +2872,140 @@ body {
     min-height: 100vh;
     margin: 0;
     overflow-x: hidden;
-
-    background: #f5f2fa !important;
+    background: #f5f3f9 !important;
 }
 
 
 /* =========================================================
-   MAIN CONTINUOUS LIQUID
+   MAIN LIQUID
    ========================================================= */
 
 body::before {
     content: "";
 
     position: fixed;
+    inset: 0;
 
-    left: -80vw;
-    top: 0;
-
-    width: 260vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
 
     pointer-events: none;
-
     z-index: 0;
 
     background:
-        linear-gradient(
-            110deg,
+        radial-gradient(
+            ellipse 55% 45% at 5% 50%,
+            rgba(124, 58, 237, 0.25),
+            transparent 72%
+        ),
 
-            rgba(88, 45, 205, 0.42) 0%,
+        radial-gradient(
+            ellipse 55% 42% at 25% 30%,
+            rgba(214, 82, 220, 0.22),
+            transparent 72%
+        ),
 
-            rgba(112, 55, 220, 0.45) 10%,
+        radial-gradient(
+            ellipse 55% 45% at 45% 65%,
+            rgba(55, 125, 235, 0.23),
+            transparent 72%
+        ),
 
-            rgba(166, 65, 222, 0.40) 20%,
+        radial-gradient(
+            ellipse 55% 42% at 65% 30%,
+            rgba(40, 190, 165, 0.22),
+            transparent 72%
+        ),
 
-            rgba(105, 70, 220, 0.38) 30%,
+        radial-gradient(
+            ellipse 55% 45% at 85% 65%,
+            rgba(225, 90, 195, 0.23),
+            transparent 72%
+        ),
 
-            rgba(55, 105, 225, 0.38) 40%,
-
-            rgba(22, 145, 210, 0.36) 50%,
-
-            rgba(25, 180, 155, 0.34) 60%,
-
-            rgba(52, 175, 105, 0.32) 69%,
-
-            rgba(135, 155, 55, 0.30) 77%,
-
-            rgba(205, 75, 180, 0.35) 87%,
-
-            rgba(100, 45, 210, 0.42) 96%,
-
-            rgba(88, 45, 205, 0.42) 100%
+        radial-gradient(
+            ellipse 50% 40% at 105% 35%,
+            rgba(100, 75, 230, 0.22),
+            transparent 72%
         );
 
-    background-size: 220% 160%;
+    opacity: 0.95;
 
-    background-position: 0% 50%;
-
-    opacity: 0.88;
+    filter: blur(45px);
 
     transform:
         translate3d(0, 0, 0)
-        scale(1.08);
+        scale(1.25);
 
-    will-change: transform, background-position;
+    will-change: transform;
 
     animation:
-        continuousLiquid
+        lightLiquidFlow
+        5s
+        linear
+        infinite;
+}
+
+
+/* =========================================================
+   SECOND SOFT CURRENT
+   ========================================================= */
+
+body::after {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+    z-index: 0;
+
+    background:
+        radial-gradient(
+            ellipse 60% 40% at 0% 35%,
+            rgba(80, 105, 235, 0.16),
+            transparent 72%
+        ),
+
+        radial-gradient(
+            ellipse 55% 42% at 22% 70%,
+            rgba(130, 70, 225, 0.17),
+            transparent 72%
+        ),
+
+        radial-gradient(
+            ellipse 60% 40% at 45% 30%,
+            rgba(225, 90, 205, 0.15),
+            transparent 72%
+        ),
+
+        radial-gradient(
+            ellipse 55% 42% at 68% 70%,
+            rgba(40, 185, 160, 0.17),
+            transparent 72%
+        ),
+
+        radial-gradient(
+            ellipse 60% 40% at 95% 35%,
+            rgba(90, 115, 235, 0.17),
+            transparent 72%
+        );
+
+    opacity: 0.75;
+
+    filter: blur(50px);
+
+    transform:
+        translate3d(0, 0, 0)
+        scale(1.25);
+
+    will-change: transform;
+
+    animation:
+        lightLiquidReverse
         7s
         linear
         infinite;
@@ -2947,279 +3013,146 @@ body::before {
 
 
 /* =========================================================
-   SECOND LIQUID CURRENT
+   MAIN MOVEMENT
    ========================================================= */
 
-body::after {
-    content: "";
-
-    position: fixed;
-
-    left: -80vw;
-    top: 0;
-
-    width: 260vw;
-    height: 100vh;
-
-    pointer-events: none;
-
-    z-index: 0;
-
-    background:
-        linear-gradient(
-            70deg,
-
-            rgba(60, 70, 210, 0.22) 0%,
-
-            rgba(80, 55, 220, 0.25) 12%,
-
-            rgba(160, 60, 220, 0.24) 24%,
-
-            rgba(50, 115, 220, 0.23) 38%,
-
-            rgba(20, 170, 175, 0.25) 52%,
-
-            rgba(45, 175, 105, 0.22) 64%,
-
-            rgba(220, 80, 185, 0.25) 78%,
-
-            rgba(90, 55, 220, 0.24) 90%,
-
-            rgba(60, 70, 210, 0.22) 100%
-        );
-
-    background-size: 210% 170%;
-
-    background-position: 100% 50%;
-
-    opacity: 0.68;
-
-    transform:
-        translate3d(0, 0, 0)
-        scale(1.12);
-
-    will-change: transform, background-position;
-
-    animation:
-        continuousLiquidReverse
-        9s
-        linear
-        infinite;
-}
-
-
-/* =========================================================
-   ACTUAL LIQUID MOVEMENT
-   ========================================================= */
-
-@keyframes continuousLiquid {
+@keyframes lightLiquidFlow {
 
     0% {
-        background-position: 0% 48%;
-
         transform:
-            translate3d(0, 0, 0)
-            scale(1.08);
+            translate3d(-12%, 0, 0)
+            scale(1.25);
     }
 
-    12.5% {
-        background-position: 12.5% 52%;
-
+    20% {
         transform:
-            translate3d(-4vw, 1vh, 0)
-            scale(1.10);
+            translate3d(-7%, 2%, 0)
+            scale(1.28);
     }
 
-    25% {
-        background-position: 25% 48%;
-
+    40% {
         transform:
-            translate3d(-8vw, -1vh, 0)
-            scale(1.12);
+            translate3d(-2%, -2%, 0)
+            scale(1.25);
     }
 
-    37.5% {
-        background-position: 37.5% 52%;
-
+    60% {
         transform:
-            translate3d(-12vw, 1vh, 0)
-            scale(1.10);
+            translate3d(3%, 2%, 0)
+            scale(1.28);
     }
 
-    50% {
-        background-position: 50% 48%;
-
+    80% {
         transform:
-            translate3d(-16vw, -1vh, 0)
-            scale(1.12);
-    }
-
-    62.5% {
-        background-position: 62.5% 52%;
-
-        transform:
-            translate3d(-20vw, 1vh, 0)
-            scale(1.10);
-    }
-
-    75% {
-        background-position: 75% 48%;
-
-        transform:
-            translate3d(-24vw, -1vh, 0)
-            scale(1.12);
-    }
-
-    87.5% {
-        background-position: 87.5% 52%;
-
-        transform:
-            translate3d(-28vw, 1vh, 0)
-            scale(1.10);
+            translate3d(8%, -1%, 0)
+            scale(1.25);
     }
 
     100% {
-        background-position: 100% 48%;
-
         transform:
-            translate3d(-32vw, 0, 0)
-            scale(1.08);
+            translate3d(12%, 0, 0)
+            scale(1.25);
     }
 }
 
 
 /* =========================================================
-   SECOND CURRENT MOVES OPPOSITE
+   SECOND CURRENT
    ========================================================= */
 
-@keyframes continuousLiquidReverse {
+@keyframes lightLiquidReverse {
 
     0% {
-        background-position: 100% 52%;
-
         transform:
-            translate3d(0, 0, 0)
-            scale(1.12);
+            translate3d(12%, 1%, 0)
+            scale(1.25);
     }
 
-    12.5% {
-        background-position: 87.5% 48%;
-
+    20% {
         transform:
-            translate3d(4vw, -1vh, 0)
-            scale(1.10);
+            translate3d(7%, -2%, 0)
+            scale(1.28);
     }
 
-    25% {
-        background-position: 75% 52%;
-
+    40% {
         transform:
-            translate3d(8vw, 1vh, 0)
-            scale(1.13);
+            translate3d(2%, 2%, 0)
+            scale(1.25);
     }
 
-    37.5% {
-        background-position: 62.5% 48%;
-
+    60% {
         transform:
-            translate3d(12vw, -1vh, 0)
-            scale(1.10);
+            translate3d(-3%, -2%, 0)
+            scale(1.28);
     }
 
-    50% {
-        background-position: 50% 52%;
-
+    80% {
         transform:
-            translate3d(16vw, 1vh, 0)
-            scale(1.13);
-    }
-
-    62.5% {
-        background-position: 37.5% 48%;
-
-        transform:
-            translate3d(20vw, -1vh, 0)
-            scale(1.10);
-    }
-
-    75% {
-        background-position: 25% 52%;
-
-        transform:
-            translate3d(24vw, 1vh, 0)
-            scale(1.13);
-    }
-
-    87.5% {
-        background-position: 12.5% 48%;
-
-        transform:
-            translate3d(28vw, -1vh, 0)
-            scale(1.10);
+            translate3d(-8%, 1%, 0)
+            scale(1.25);
     }
 
     100% {
-        background-position: 0% 52%;
-
         transform:
-            translate3d(32vw, 0, 0)
-            scale(1.12);
+            translate3d(-12%, 0, 0)
+            scale(1.25);
     }
 }
 
 
 /* =========================================================
-   WEBSITE CONTENT ABOVE BACKGROUND
+   CONTENT ABOVE BACKGROUND
    ========================================================= */
 
-.top-navigation {
-    position: relative;
-    z-index: 5;
-}
-
-.container {
+.top-navigation,
+.container,
+main,
+section,
+.hero,
+.hero-heading {
     position: relative;
     z-index: 2;
 }
 
 
 /* =========================================================
-   MOBILE OPTIMIZATION
+   MOBILE
    ========================================================= */
 
 @media (max-width: 600px) {
 
-    body::before {
-
-        left: -130vw;
-
-        width: 360vw;
-        height: 100dvh;
-
-        top: 0;
-
-        background-size: 240% 180%;
-
-        opacity: 0.84;
-
-        animation-duration: 6s;
+    body {
+        min-height: 100dvh;
     }
 
+    body::before {
+        inset: 0;
 
-    body::after {
-
-        left: -130vw;
-
-        width: 360vw;
+        width: 100%;
         height: 100dvh;
 
-        top: 0;
+        filter: blur(32px);
 
-        background-size: 230% 180%;
+        opacity: 0.92;
 
-        opacity: 0.64;
+        transform: scale(1.35);
 
-        animation-duration: 8s;
+        animation-duration: 4.5s;
+    }
+
+    body::after {
+        inset: 0;
+
+        width: 100%;
+        height: 100dvh;
+
+        filter: blur(36px);
+
+        opacity: 0.72;
+
+        transform: scale(1.35);
+
+        animation-duration: 6s;
     }
 }
 
@@ -3231,14 +3164,10 @@ body::after {
 @media (max-width: 380px) {
 
     body::before {
-        left: -145vw;
-        width: 390vw;
-        animation-duration: 5.5s;
+        animation-duration: 4.2s;
     }
 
     body::after {
-        left: -145vw;
-        width: 390vw;
-        animation-duration: 7.5s;
+        animation-duration: 5.5s;
     }
 }
