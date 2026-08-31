@@ -2841,196 +2841,153 @@ textarea:focus-visible {
 
 
 
-
 /* =========================================================
-   FAST VISIBLE SMOKY BACKGROUND
+   FLOWING PURPLE INK BACKGROUND
 ========================================================= */
 
 body {
     position: relative;
     min-height: 100vh;
-    background: #eeeaf7;
     overflow-x: hidden;
+    background: #f1eef8;
     isolation: isolate;
 }
 
 
-/* Main visible smoke */
+/* Full page liquid ink layer */
 
 body::before {
     content: "";
     position: fixed;
 
-    width: 140vw;
-    height: 110vh;
+    top: -10%;
+    left: -10%;
 
-    left: -20vw;
-    top: -5vh;
+    width: 120%;
+    height: 120%;
 
     pointer-events: none;
 
+    z-index: -1;
+
     background:
-        radial-gradient(
-            ellipse 24% 32% at 20% 45%,
-            rgba(89, 30, 220, 0.82) 0%,
-            rgba(111, 40, 230, 0.65) 45%,
-            transparent 72%
-        ),
+        linear-gradient(
+            110deg,
+            transparent 0%,
+            transparent 18%,
 
-        radial-gradient(
-            ellipse 22% 30% at 48% 30%,
-            rgba(157, 35, 230, 0.78) 0%,
-            rgba(180, 45, 225, 0.55) 42%,
-            transparent 70%
-        ),
+            rgba(91, 35, 210, 0.88) 25%,
+            rgba(121, 43, 224, 0.92) 32%,
 
-        radial-gradient(
-            ellipse 25% 34% at 78% 55%,
-            rgba(106, 35, 225, 0.82) 0%,
-            rgba(139, 45, 225, 0.58) 42%,
-            transparent 72%
-        ),
+            rgba(174, 47, 225, 0.82) 40%,
+            rgba(123, 45, 220, 0.72) 48%,
 
-        radial-gradient(
-            ellipse 20% 26% at 60% 82%,
-            rgba(194, 48, 220, 0.62) 0%,
-            rgba(150, 45, 225, 0.38) 45%,
-            transparent 72%
+            transparent 57%,
+            transparent 100%
         );
 
-    opacity: 0.9;
+    background-size: 220% 180%;
 
-    transform: translate3d(0, 0, 0) scale(1.05);
+    animation: inkFlow 7s linear infinite;
 
-    animation: fastSmokeMovement 6s ease-in-out infinite alternate;
-
-    z-index: -1;
+    transform: skewX(-12deg) scale(1.15);
 }
 
 
-/* Secondary smoke layer */
+/* Second flowing ink ribbon */
 
 body::after {
     content: "";
 
     position: fixed;
 
-    width: 130vw;
-    height: 100vh;
+    top: -20%;
+    left: -20%;
 
-    left: -15vw;
-    top: 0;
+    width: 140%;
+    height: 140%;
 
     pointer-events: none;
 
+    z-index: -1;
+
     background:
-        radial-gradient(
-            ellipse 18% 25% at 35% 70%,
-            rgba(72, 35, 205, 0.65),
-            transparent 68%
-        ),
+        linear-gradient(
+            70deg,
+            transparent 0%,
+            transparent 30%,
 
-        radial-gradient(
-            ellipse 20% 27% at 85% 25%,
-            rgba(205, 55, 220, 0.60),
-            transparent 70%
-        ),
+            rgba(77, 30, 195, 0.62) 37%,
+            rgba(116, 39, 225, 0.78) 43%,
 
-        radial-gradient(
-            ellipse 16% 23% at 10% 20%,
-            rgba(120, 45, 225, 0.55),
-            transparent 68%
+            rgba(205, 53, 218, 0.70) 49%,
+            rgba(133, 43, 225, 0.60) 55%,
+
+            transparent 64%,
+            transparent 100%
         );
 
-    opacity: 0.75;
+    background-size: 250% 190%;
 
-    transform: translate3d(0, 0, 0) scale(1.08);
+    animation: inkFlowReverse 9s linear infinite;
 
-    animation: secondarySmokeMovement 7s ease-in-out infinite alternate;
-
-    z-index: -1;
+    transform: skewX(14deg) scale(1.15);
 }
 
 
 /* =========================================================
-   FAST SMOKE MOTION
+   LIQUID MOVEMENT
 ========================================================= */
 
-@keyframes fastSmokeMovement {
+@keyframes inkFlow {
 
     0% {
-        transform:
-            translate3d(-12%, -5%, 0)
-            scale(1.05);
-    }
-
-    20% {
-        transform:
-            translate3d(5%, 8%, 0)
-            scale(1.12);
-    }
-
-    40% {
-        transform:
-            translate3d(14%, -4%, 0)
-            scale(1.08);
-    }
-
-    60% {
-        transform:
-            translate3d(-4%, 12%, 0)
-            scale(1.15);
-    }
-
-    80% {
-        transform:
-            translate3d(-15%, 2%, 0)
-            scale(1.10);
-    }
-
-    100% {
-        transform:
-            translate3d(10%, -8%, 0)
-            scale(1.16);
-    }
-}
-
-
-@keyframes secondarySmokeMovement {
-
-    0% {
-        transform:
-            translate3d(12%, 5%, 0)
-            scale(1.08);
+        background-position: 0% 50%;
     }
 
     25% {
-        transform:
-            translate3d(-8%, -8%, 0)
-            scale(1.14);
+        background-position: 40% 35%;
     }
 
     50% {
-        transform:
-            translate3d(-15%, 8%, 0)
-            scale(1.10);
+        background-position: 80% 60%;
     }
 
     75% {
-        transform:
-            translate3d(8%, -5%, 0)
-            scale(1.16);
+        background-position: 120% 40%;
     }
 
     100% {
-        transform:
-            translate3d(15%, 10%, 0)
-            scale(1.08);
+        background-position: 160% 55%;
     }
 }
 
 
-/* Keep website above the smoke */
+@keyframes inkFlowReverse {
+
+    0% {
+        background-position: 160% 40%;
+    }
+
+    25% {
+        background-position: 120% 60%;
+    }
+
+    50% {
+        background-position: 70% 35%;
+    }
+
+    75% {
+        background-position: 30% 65%;
+    }
+
+    100% {
+        background-position: -10% 45%;
+    }
+}
+
+
+/* Keep website content above ink */
 
 .top-navigation,
 .homepage {
