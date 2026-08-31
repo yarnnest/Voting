@@ -1145,7 +1145,345 @@ function escapeHtml(value) {
 
 
 
+#################################################################
 
 
 
 
+/* =========================================================
+   PEACEFUL LIQUID FLOW
+   Lightweight Canvas Animation
+   ========================================================= */
+
+(function () {
+
+    const canvas = document.getElementById("liquidBackground");
+
+    if (!canvas) {
+        console.log("Liquid canvas not found");
+        return;
+    }
+
+    const ctx = canvas.getContext("2d");
+
+    let width = 0;
+    let height = 0;
+
+    let dpr = 1;
+
+    let animationId = null;
+
+    let time = 0;
+
+
+    /* -----------------------------------------------------
+       RESIZE
+       ----------------------------------------------------- */
+
+    function resize() {
+
+        dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+
+        width = window.innerWidth;
+        height = window.innerHeight;
+
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+
+        ctx.setTransform(
+            dpr,
+            0,
+            0,
+            dpr,
+            0,
+            0
+        );
+    }
+
+
+    window.addEventListener(
+        "resize",
+        resize,
+        { passive: true }
+    );
+
+
+    resize();
+
+
+    /* -----------------------------------------------------
+       SMOOTH LIQUID CURVE
+       ----------------------------------------------------- */
+
+    function liquidY(
+        x,
+        base,
+        amplitude,
+        frequency,
+        speed,
+        phase
+    ) {
+
+        return (
+            base
+
+            + Math.sin(
+                x * frequency
+                + time * speed
+                + phase
+            ) * amplitude
+
+            + Math.sin(
+                x * frequency * 0.47
+                - time * speed * 0.53
+                + phase
+            ) * amplitude * 0.45
+
+            + Math.sin(
+                x * frequency * 0.19
+                + time * speed * 0.27
+                + phase
+            ) * amplitude * 0.25
+        );
+    }
+
+
+    /* -----------------------------------------------------
+       DRAW LIQUID SHAPE
+       ----------------------------------------------------- */
+
+    function drawLiquid(
+        base,
+        amplitude,
+        frequency,
+        speed,
+        phase,
+        thickness,
+        color
+    ) {
+
+        const step = Math.max(
+            12,
+            width / 90
+        );
+
+        ctx.beginPath();
+
+
+        /* Top edge */
+
+        let x = -step;
+
+        ctx.moveTo(
+            x,
+            liquidY(
+                x,
+                base,
+                amplitude,
+                frequency,
+                speed,
+                phase
+            )
+        );
+
+
+        for (
+            x = 0;
+            x <= width + step;
+            x += step
+        ) {
+
+            const y = liquidY(
+                x,
+                base,
+                amplitude,
+                frequency,
+                speed,
+                phase
+            );
+
+            ctx.lineTo(x, y);
+        }
+
+
+        /* Bottom edge */
+
+        for (
+            x = width + step;
+            x >= -step;
+            x -= step
+        ) {
+
+            const y =
+                liquidY(
+                    x,
+                    base,
+                    amplitude,
+                    frequency,
+                    speed,
+                    phase
+                )
+                + thickness;
+
+            ctx.lineTo(x, y);
+        }
+
+
+        ctx.closePath();
+
+        ctx.fillStyle = color;
+
+        ctx.fill();
+    }
+
+
+    /* -----------------------------------------------------
+       ANIMATION
+       ----------------------------------------------------- */
+
+    function animate() {
+
+        /*
+         * Slow enough to look like liquid,
+         * fast enough to visibly move.
+         */
+
+        time += 0.012;
+
+
+        /* Base */
+
+        ctx.fillStyle = "#f7f5ff";
+
+        ctx.fillRect(
+            0,
+            0,
+            width,
+            height
+        );
+
+
+        /* -------------------------------------------------
+           BACK LIQUID
+           ------------------------------------------------- */
+
+        drawLiquid(
+            height * 0.12,
+            height * 0.075,
+            0.0045,
+            0.75,
+            0,
+            height * 0.28,
+            "#e3d7ff"
+        );
+
+
+        /* -------------------------------------------------
+           PURPLE CURRENT
+           ------------------------------------------------- */
+
+        drawLiquid(
+            height * 0.29,
+            height * 0.085,
+            0.0042,
+            0.92,
+            2,
+            height * 0.25,
+            "#d0bcff"
+        );
+
+
+        /* -------------------------------------------------
+           LIGHT PINK CURRENT
+           ------------------------------------------------- */
+
+        drawLiquid(
+            height * 0.51,
+            height * 0.07,
+            0.0048,
+            0.78,
+            4,
+            height * 0.22,
+            "#ead9f4"
+        );
+
+
+        /* -------------------------------------------------
+           LOWER PURPLE CURRENT
+           ------------------------------------------------- */
+
+        drawLiquid(
+            height * 0.70,
+            height * 0.08,
+            0.004,
+            0.68,
+            1.5,
+            height * 0.24,
+            "#ded0f5"
+        );
+
+
+        /*
+         * Very light flowing separation.
+         * This gives the water its layered appearance
+         * without using blur.
+         */
+
+        drawLiquid(
+            height * 0.43,
+            height * 0.035,
+            0.0045,
+            1.1,
+            3,
+            height * 0.035,
+            "#ffffff"
+        );
+
+
+        animationId = requestAnimationFrame(
+            animate
+        );
+    }
+
+
+    /* -----------------------------------------------------
+       START
+       ----------------------------------------------------- */
+
+    animate();
+
+
+    /* -----------------------------------------------------
+       SAVE PERFORMANCE WHEN TAB IS HIDDEN
+       ----------------------------------------------------- */
+
+    document.addEventListener(
+        "visibilitychange",
+        function () {
+
+            if (document.hidden) {
+
+                if (animationId !== null) {
+
+                    cancelAnimationFrame(
+                        animationId
+                    );
+
+                    animationId = null;
+                }
+
+            } else {
+
+                if (animationId === null) {
+
+                    animate();
+                }
+            }
+
+        }
+    );
+
+})();
