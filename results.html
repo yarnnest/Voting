@@ -1,118 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Results</title>
-    <link rel="stylesheet" href="results.css">
+
+    <link rel="stylesheet" href="styles.css">
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body>
-<header class="top-navigation">
-    <a href="index.html" class="brand" style="text-decoration:none;">
-        <div class="brand-icon custom-vote-logo">
-    <svg
-        viewBox="0 0 48 48"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true">
 
-        <rect
-            x="10"
-            y="7"
-            width="28"
-            height="34"
-            rx="6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="3"/>
+    <!-- SAME BACKGROUND STRUCTURE AS INDEX -->
+    <div class="liquid-background"></div>
 
-        <path
-            d="M16 16h16"
-            stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"/>
+    <!-- SAME TOP NAVIGATION STRUCTURE AS INDEX -->
+    <header class="top-navigation">
 
-        <path
-            d="M16 23h7"
-            stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"/>
+        <a href="index.html" class="brand">
+            <div class="brand-icon custom-vote-logo">
+                <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect x="10" y="7" width="28" height="34" rx="6"
+                        fill="none" stroke="currentColor" stroke-width="3" />
 
-        <path
-            d="M18 31l4 4 9-10"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"/>
+                    <path d="M16 16h16"
+                        stroke="currentColor" stroke-width="3" stroke-linecap="round" />
 
-    </svg>
-</div>
-        <span>Voting Portal</span>
-    </a>
-    <a href="admin.html" class="admin-button">⚙ Admin Panel</a>
-</header>
+                    <path d="M16 23h7"
+                        stroke="currentColor" stroke-width="3" stroke-linecap="round" />
 
-<main class="container">
-    <button class="back-button" onclick="window.location.href='index.html'">← All Voting Pages</button>
-
-    <section class="page-header">
-        <div class="hero-badge">✦ LIVE RESULTS</div>
-        <h1 id="resultTitle">Loading...</h1>
-        <p>Live vote totals, percentages and voter comments.</p>
-    </section>
-
-    <div id="loadingResults" class="loading-state">Loading live results...</div>
-    <div id="resultsError" class="message error hidden"></div>
-
-    <section id="resultsContent" class="hidden">
-        <div class="winner-card">
-            <div class="winner-label">CURRENT LEADER</div>
-            <div id="winnerName" class="winner-name">Loading...</div>
-            <div id="winnerVotes" class="winner-votes">0 votes</div>
-            <div id="winnerStatus" class="winner-status"></div>
-        </div>
-
-        <div class="live-results-grid">
-            <div class="result-option">
-                <div class="result-option-top">
-                    <h2 id="resultImage1Name">Image 1</h2>
-                    <strong id="resultVote1">0</strong>
-                </div>
-                <img id="resultImage1" class="result-image" src="" alt="">
-                <div class="result-bar"><div id="resultBar1" class="result-bar-fill"></div></div>
-                <div class="result-percentage">
-                    <span><span id="resultPercentage1">0</span>%</span>
-                    <span>votes</span>
-                </div>
+                    <path d="M18 31l4 4 9-10"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
             </div>
 
-            <div class="result-option">
-                <div class="result-option-top">
-                    <h2 id="resultImage2Name">Image 2</h2>
-                    <strong id="resultVote2">0</strong>
-                </div>
-                <img id="resultImage2" class="result-image" src="" alt="">
-                <div class="result-bar"><div id="resultBar2" class="result-bar-fill"></div></div>
-                <div class="result-percentage">
-                    <span><span id="resultPercentage2">0</span>%</span>
-                    <span>votes</span>
-                </div>
-            </div>
-        </div>
+            <span>Voting Portal</span>
+        </a>
 
-        <section class="comments-section">
-            <div class="comments-heading">
-                <div>
-                    <div class="hero-badge">✦ VOICE OF THE VOTERS</div>
-                    <h2>Recent Comments</h2>
+        <a href="admin.html" class="admin-button">
+            <span>⚙</span>
+            Admin Panel
+        </a>
+
+    </header>
+
+
+    <!-- SAME CONTAINER STRUCTURE AS INDEX -->
+    <div class="container">
+
+        <main id="resultsPage">
+
+            <button class="back-button"
+                onclick="window.location.href='index.html'">
+                ← All Voting Pages
+            </button>
+
+
+            <section class="page-header">
+
+                <div class="hero-badge">
+                    ✦ LIVE RESULTS
                 </div>
-                <span id="commentCount">0 comments</span>
+
+                <h1 id="resultTitle">
+                    Loading...
+                </h1>
+
+                <p>
+                    Live vote totals, percentages and voter comments.
+                </p>
+
+            </section>
+
+
+            <div id="loadingResults" class="loading-state">
+                Loading live results...
             </div>
-            <div id="commentsList" class="comments-list"></div>
-        </section>
-    </section>
-</main>
-<script src="results.js"></script>
+
+            <div id="resultsError" class="message error hidden"></div>
+
+
+            <section id="resultsContent" class="hidden">
+
+                <!-- CURRENT LEADER -->
+                <div class="winner-card">
+
+                    <div class="winner-label">
+                        CURRENT LEADER
+                    </div>
+
+                    <div id="winnerName" class="winner-name">
+                        Loading...
+                    </div>
+
+                    <div id="winnerVotes" class="winner-votes">
+                        0 votes
+                    </div>
+
+                    <div id="winnerStatus" class="winner-status"></div>
+
+                </div>
+
+
+                <!-- RESULT CARDS -->
+                <div class="live-results-grid">
+
+                    <div class="result-option">
+
+                        <div class="result-option-top">
+
+                            <h2 id="resultImage1Name">
+                                Image 1
+                            </h2>
+
+                            <strong id="resultVote1">
+                                0
+                            </strong>
+
+                        </div>
+
+                        <img
+                            id="resultImage1"
+                            class="result-image"
+                            src=""
+                            alt=""
+                        >
+
+                        <div class="result-bar">
+                            <div
+                                id="resultBar1"
+                                class="result-bar-fill">
+                            </div>
+                        </div>
+
+                        <div class="result-percentage">
+
+                            <span>
+                                <span id="resultPercentage1">0</span>%
+                            </span>
+
+                            <span>
+                                votes
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="result-option">
+
+                        <div class="result-option-top">
+
+                            <h2 id="resultImage2Name">
+                                Image 2
+                            </h2>
+
+                            <strong id="resultVote2">
+                                0
+                            </strong>
+
+                        </div>
+
+                        <img
+                            id="resultImage2"
+                            class="result-image"
+                            src=""
+                            alt=""
+                        >
+
+                        <div class="result-bar">
+                            <div
+                                id="resultBar2"
+                                class="result-bar-fill">
+                            </div>
+                        </div>
+
+                        <div class="result-percentage">
+
+                            <span>
+                                <span id="resultPercentage2">0</span>%
+                            </span>
+
+                            <span>
+                                votes
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- COMMENTS -->
+                <section class="comments-section">
+
+                    <div class="comments-heading">
+
+                        <div>
+
+                            <div class="hero-badge">
+                                ✦ VOICE OF THE VOTERS
+                            </div>
+
+                            <h2>
+                                Recent Comments
+                            </h2>
+
+                        </div>
+
+                        <span id="commentCount">
+                            0 comments
+                        </span>
+
+                    </div>
+
+                    <div
+                        id="commentsList"
+                        class="comments-list">
+                    </div>
+
+                </section>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="results.js"></script>
+
 </body>
+
 </html>
