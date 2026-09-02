@@ -1181,13 +1181,7 @@ function renderManagedVote(
 
                         ? `
 
-                        <div class="managed-comment">
-
-                            ${escapeHtml(
-                                vote.comment
-                            )}
-
-                        </div>
+                        <div class="managed-comment">${escapeHtml(vote.comment)}</div>
 
                         `
 
